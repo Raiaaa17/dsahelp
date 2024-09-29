@@ -1,0 +1,1284 @@
+---
+title: "DSA1101: Everything You Need"
+editor: visual
+editor_options: 
+  chunk_output_type: inline
+---
+
+Hi! I'm Ray! Welcome to your ultimate DSA1101 survival guide! 🎉 Whether you're new to data science or leveling up for midterms, this helpsheet blog has bite-sized tips, easy code, and all the cheat codes you need. 🚀 From data wrangling to machine learning, I've got you covered. Ready to dive in? Let’s go! 😎
+
+# Getting Started
+
+## Working Directory
+
+```{r}
+
+# setwd("/Users/rayana/Documents/DSA1101/")
+# getwd()
+
+```
+
+## Reading File
+
+```{r}
+
+data <- read.table("crab.csv", header = FALSE, sep = "")
+data <- read.csv("crab.csv", header = TRUE, sep = ",") 
+
+# Reading a tab-separated file
+data <- read.delim("crab.csv")
+data <- read.csv("crab.csv", sep = "\t") 
+```
+
+## Common Plots
+
+```{r}
+
+# pie.chart <- pie(x, labels, radius, main, col, clockwise)
+# bar.chart <- barplot(H, xlab, ylab, main, names.arg, col)
+# box.chart <- boxplot(x, data, notch, varwidth, names, main)
+# histogram <- hist(v, main, xlab, xlim, ylim, breaks, col, border)
+# linegraph <- plot(v, type, col, xlab, ylab)
+# scatterplot <- plot(x, y, xlab, ylab, xlim, ylim, axes)
+
+```
+
+## Uselful Functions
+
+Here are some functions that will make your life so much easier—but let's be real, you probably forget how to use them half the time! 😅
+
+### Function: ifelse()
+
+```{r}
+x <- 1:10
+x <- ifelse(x %% 2 == 0, "even", "odd")
+x
+```
+
+### Function: which()
+
+```{r}
+df <- data.frame(
+x = c(1, 2, 3, 4, 5), 
+y = c(5, 4, 3, 2, 1))
+
+rows <- which(df$x > 3)
+rows
+```
+
+### Function: append()
+
+```{r}
+vec <- c(1, 2)
+combined_vec <- append(vec, 3)
+combined_vec
+```
+
+------------------------------------------------------------------------
+
+# Interpreting Graphical Data
+
+Some questions will require us to give comments regarding the plotted data, and this is how
+
+## Interpreting Scatterplots
+
+1.  Is there any relationship? Is it strong?
+
+2.  If there is, is it positive or negative?
+
+3.  Relationship is linear or non-linear?
+
+4.  Special observations?
+
+5.  Is the variability of the response stable when x changes?
+
+```{r}
+
+data <- read.csv("house_selling_prices_FL.csv")
+plot(data$price ~ data$size, pch = 20)
+
+# Comments:
+# 1. There is a clear relationship.
+# 2. It is a positive association.
+# 3. It seems linear.
+# 4. Variability of price is quite stable as size changes.
+
+
+```
+
+### Two Categorical Scatterplots
+
+```{r}
+fev <- read.csv("FEV.csv")
+female = fev$FEV[which(fev$Sex==0)]
+# Alternative: fev$FEV[fev$Sex==0]
+male = fev$FEV[which(fev$Sex==1)] 
+# Alternative: fev$FEV[fev$Sex==1]
+
+plot(fev$height, fev$FEV, type = "n")
+points(female ~ fev$height[which(fev$Sex==0)], 
+col = "red", pch = 20)
+points(male ~ fev$height[which(fev$Sex==1)], 
+col = "darkblue", pch = 20)
+legend(1.2, 5, legend = c("Female", "Male"), 
+col = c("red","darkblue"), pch=c(20,20))
+
+# Comments:
+# Computed correlation is quite high.
+# It is clear from the plot that there is a strong 
+# positive linear association between FEV and height. 
+# The range of FEV and height for males appears larger than for females. 
+# The variability of FEV at lower heights seems slightly 
+# less than the variability of FEV at greater heights.
+
+```
+
+## Interpreting Histograms
+
+1.  Range
+
+2.  Bimodal/Unimodal
+
+3.  Symmetric/Skewed
+
+4.  Data has Gaps/is Clustered
+
+5.  Suspected outliers
+
+```{r}
+hdb <- read.csv("hdbresale_reg.csv")
+hist(hdb$resale_price)
+
+# Comments:
+# range: 200k to ~1 mil
+# unimodal
+# clearly right skewed
+# suspected outliers
+
+fev <- read.csv("FEV.csv")
+hist(fev$FEV)
+
+# Comments:
+# range: 0.5 to 6
+# unimodal
+# slightly right skewed
+# may have outliers
+
+```
+
+### Creating Separates Histograms
+
+```{r}
+
+fev <- read.csv("FEV.csv")
+female = fev$FEV[which(fev$Sex==0)]
+# Alternative: fev$FEV[fev$Sex==0]
+male = fev$FEV[which(fev$Sex==1)] 
+# Alternative: fev$FEV[fev$Sex==1]
+
+opar <- par(mfrow=c(1,2)) 
+hist(female, col = 2, freq= FALSE, 
+main = "Histogram of Female FEV", ylim = c(0,0.52))
+hist(male, col = 4, freq= FALSE, 
+main = "Histogram of Male FEV", ylim = c(0,0.52))
+# Remember to use par(mfrow=c(1,1)) to reset the diagram layout!
+
+# Comments:
+# Both histogram are unimodal but have different shapes. 
+# It is almost symmetrical for females, but quite 
+# right-skewed for males.
+# Median FEV for females is much lower than males,
+# 2.49 compared to 2.605.
+# Variability for males is higher than females.
+# The respective IQR are 1.54 and 1.05.
+```
+
+## Interpreting Boxplots
+
+1.  How many outliers
+
+2.  Median
+
+3.  Distribution
+
+4.  Any visible pattern? (Optional)
+
+```{r}
+
+hbd <- read.csv("hdbresale_reg.csv")
+bp <- boxplot(hdb$resale_price)
+outliers <- bp$out
+head(outliers)
+
+```
+
+## Interpreting Q-Q Plot
+
+```{r}
+
+fev <- read.csv("FEV.csv")
+qqnorm(fev$FEV, pch = 20)
+qqline(fev$FEV, col = "red")
+
+# Comments:
+# Left tail sample quantiles are larger than expected,
+# hence left tail shorter than normal. 
+# Right tail sample quantiles larger than expected, hence # right tail longer than normal.
+
+# Combined with the histogram of FEV, it is clear that the
+# sample of FEV is not normally distributed and quite 
+# right skewed.
+
+```
+
+------------------------------------------------------------------------
+
+# Machine Learning Model
+
+We’ve covered 3 machine learning models that are up for grabs in the midterm: linear regression, k-nearest neighbors, and decision trees.
+
+## Linear Regression Model
+
+There are assumptions have to be fulfilled before using linear model:
+
+1.  Quantitative response (check through str() function)
+
+2.  Symmetric (check through histogram and/or qqplot)
+
+3.  Variability of y is stable when x changes (check through scatterplot)
+
+If data is found to be asymmetric, can do transformation: log(Y), sqrt(Y), 1/Y
+
++-----------------------+---------------------------+------------------------+
+| Transformation        | Restriction               | Reverse Transformation |
++=======================+===========================+========================+
+| new_Y \<- log(Y)      | Y can't be 0 nor negative | pred \<- exp(pred)     |
++-----------------------+---------------------------+------------------------+
+| new_Y \<- sqrt(Y)     | Y can't be negative       | pred \<- pred\*\*2     |
++-----------------------+---------------------------+------------------------+
+| new_Y \<- 1/Y         | Y can't be 0              | pred \<- 1/pred        |
++-----------------------+---------------------------+------------------------+
+
+## K-Nearest Neighbor (KNN) Model
+
+## Decision Tree Model
+
+## Confusion Matrix
+
+Not a ML model, but a way to evaluate most of classifiers
+
+![](https://images.prismic.io/encord/edfa849b-03fb-43d2-aba5-1f53a8884e6f_image5.png?auto=compress,format){fig-align="center"}
+
+Some other formulas:
+
+![](https://miro.medium.com/v2/resize:fit:1400/1*gN97G0W-ochkB5z3lUtPBQ.png){fig-align="center"}
+
+------------------------------------------------------------------------
+
+# Tutorial QnA
+
+Welcome to the ***tutorial zone***—aka the place where I’ve had my biggest lightbulb moments! 💡✨ This is where the real learning happens, and I’m spilling all the tea on what I’ve solved and learned so far. Tutorials can be tough, but they’re also where everything *finally* clicks. Let’s make it fun and get things done! 😎
+
+## Tutorial 1 (Introduction to R)
+
+#### Offsite Questions
+
+General idea of this problem: You have just graduated from NUS and just started your first job. You plan to buy a at on your own which has price = \$1,200,000 (1.2 million dollars). You need to save money for several years before you can aord to make the down payment which is 25% of the at's price.
+
+-   Call the amount that you have saved thus far: **saved**. You start the very first month with a savings of \$10,000 that your parents gave you.
+
+```{=html}
+<!-- -->
+```
+-   Call your monthly salary as **salary** which is paid at the end of every month. Each month, you are going to dedicate 40% of your salary to save for the down payment.
+
+-   Assume that you invest your savings wisely, with a monthly average return of 2%. That means: at the end of each month, you receive an additional of **saved** ×0.02 funds where **saved** is the amount you have from end of previous month to put into your savings.
+
+-   At the end of each month, your savings will be increased by the return on your investment, plus 40% of your monthly salary.
+
+Note: In your code for the questions below, you MUST use the names as given in bold above.
+
+1.  Write the code to calculate how many months it will take you to save up enough money for the down payment for two persons of of different salary: (i) **salary** = \$7,000; and (ii) **salary** = \$10,000.
+
+    ```{r}
+    # Solution 1.i
+    cost <- 1200000 * 0.25 
+    salary <- 7000
+    saved <- 10000
+    month <- 0
+
+    while(saved < cost){
+    month <- month + 1
+    saved <- saved + 0.4 * salary + 0.02 * saved }
+    print(month) # 55
+
+    # Solution 2.i
+    cost <- 1200000 * 0.25 
+    salary <- 10000
+    saved <- 10000
+    month <- 0
+
+    while(saved < cost){
+    month <- month + 1
+    saved <- saved + 0.4 * salary + 0.02 * saved }
+    print(month) # 44
+    ```
+
+2.  In question above, we unrealistically assumed that the salary doesn't change over the years. However, now we consider that the salary will be raised every 4 months by a rate named rate, this variable should be in decimal form (i.e. 0.03 for 3%). The new salary will be applied for the month after every batch of 4 months.
+
+    With this further assumption, write the code to calculate how many months it will take a person to save up enough money for the down payment if that person has (i) (**salary** = \$7,000 and **rate** = 0.02); (ii) (**salary** = \$10,000 and **rate** = 0.01).
+
+    ```{r}
+    # Solution 2.i
+    cost <- 1200000 * 0.25 
+    salary <- 7000
+    saved <- 10000
+    month <- 0
+    rate <- 0.02
+
+    while (saved < cost) {
+      month <- month + 1
+      saved <- saved + 0.4 * salary + 0.02 * saved
+      if (month %% 4 == 0) {
+        salary <-  salary * (1 + rate)
+      }
+    }
+    print(month) #52
+
+    # Solution 2.ii
+    cost <- 1200000 * 0.25 
+    salary <- 10000
+    saved <- 10000
+    month <- 0
+    rate <- 0.01
+
+    while (saved < cost) {
+      month <- month + 1
+      saved <- saved + 0.4 * salary + 0.02 * saved
+      if (month %% 4 == 0) {
+        salary <-  salary * (1 + rate)
+      }
+    }
+    print(month) #43
+    ```
+
+#### Onsite Questions
+
+COMING SOON
+
+## Tutorial 2 (Basic Prob and Stats)
+
+#### Offsite Questions
+
+Forced Expiratory Volume (FEV) is an index of pulmonary function that measures the volume of air expelled after 1 second of constant effort. The dataset `FEV.csv` contains measurements for 654 children aged 3 to 19 years of age. The purpose of the data collection was to study how FEV is affected by certain other variables. The variables that we shall work with are
+
+**Age**: Age in years.\
+**FEV**: FEV measurement.\
+**Hgt**: Height in inches.\
+**height**: Height in meters\
+**Sex**: 0 = female, 1 = male.\
+**Smoking status**: 0 = current non-smoker, 1 = current smoker.
+
+\(a\) What is the response variable in this study?
+
+```{r}
+# FEV is the response variable in this study
+```
+
+\(b\) Create a histogram of FEV and comment on it.
+
+```{r}
+fev <- read.csv("FEV.csv")
+hist(fev$FEV)
+
+# Comments:
+# range: 0.5 to 6
+# unimodal
+# slightly right skewed
+# may have outliers
+```
+
+\(c\) Create a boxplot of FEV and identify how many outliers there are. Investigate your data and comment on these outliers.
+
+```{r}
+bp <- boxplot(fev$FEV)
+outliers <- bp$out
+length(outliers)
+# There are 9 outliers
+
+index <- which(fev$FEV %in% outliers)
+fev[index,]
+
+# Comments:
+# 1. All outliers are male
+# 2. Most (8/9) are
+# non-smokers
+# 3. They are rather
+# tall
+```
+
+\(d\) Generally, is the sample of FEV normally distributed?
+
+```{r}
+qqnorm(fev$FEV, pch = 20)
+qqline(fev$FEV, col = "red")
+
+# Comments:
+# Left tail sample quantiles are larger than expected,
+# hence left tail shorter than normal. 
+# Right tail sample quantiles larger than expected, hence # right tail longer than normal.
+
+# Combined with the histogram of FEV, it is clear that the
+# sample of FEV is not normally distributed and quite 
+# right skewed.
+
+```
+
+\(e\) Create separate histograms for male and female FEV, then obtain separate numerical summaries for males and female FEV. Comment on what you observe.
+
+```{r}
+# First, obtain the male and female FEV values separately
+# to plot onto two different histograms.
+
+female = fev$FEV[which(fev$Sex==0)]
+# Alternative: fev$FEV[fev$Sex==0]
+male = fev$FEV[which(fev$Sex==1)] 
+# Alternative: fev$FEV[fev$Sex==1]
+
+# Now plot the two histograms side-by-side
+
+opar <- par(mfrow=c(1,2)) 
+hist(female, col = 2, freq= FALSE, 
+main = "Histogram of Female FEV", ylim = c(0,0.52))
+hist(male, col = 4, freq= FALSE, 
+main = "Histogram of Male FEV", ylim = c(0,0.52))
+# Remember to use par(mfrow=c(1,1))  to reset the diagram layout!
+
+# obtaining separate numerical summaries for male and female
+IQR(female) # 1.04
+summary(female) 
+var(female) # 0.4169424
+
+IQR(male) # 1.5275
+summary(male)
+var(male) # 1.006866
+
+# Comments:
+# Both histogram are unimodal but have different shapes. 
+# It is almost symmetrical for females, but quite right-skewed for males.
+# Median FEV for females is much lower than males, 2.49 compared to 2.605.
+# Variability for males is higher than females.
+# The respective IQR are 1.54 and 1.05.
+
+```
+
+\(f\) Create a scatterplot with height (in metres) on the x-axis and FEV on the y-axis.
+
+```{r}
+plot(fev$height, fev$FEV)
+points(female ~ fev$height[which(fev$Sex==0)], 
+col = "red", pch = 20)
+points(male ~ fev$height[which(fev$Sex==1)], 
+col = "darkblue", pch = 20)
+legend(1.2, 5, legend = c("Female", "Male"), 
+col = c("red","darkblue"), pch=c(20,20))
+
+```
+
+\(g\) Compute the correlation between FEV and height and comment on your results.
+
+```{r}
+cor(fev$FEV, fev$height) # 0.8675619
+# Computed correlation is quite high.
+# It is clear from the plot that there is a strong 
+# positive linear association between FEV and height. 
+# The range of FEV and height for males appears larger than for females. 
+# The variability of FEV at lower heights seems slightly 
+# less than the variability of FEV at greater heights.
+
+```
+
+#### Onsite Questions
+
+COMING SOON
+
+## Tutorial 3 (Linear Regression 1)
+
+#### Offsite Questions
+
+Consider the question given in Tutorial 1.
+
+\(a\) For the first question in Tutorial 1, use the code to define a function, called F1, where the argument of F1 is salary. Run function F1 for the two cases mentioned.
+
+```{r}
+cost <- 1200000 * 0.25 
+F1 <- function(salary) {
+  saved <- 10000
+  month <- 0
+  while(saved < cost) {
+    month <- month + 1
+    saved <- saved + 0.4 * salary + 0.02 * saved
+    }
+  return(month)
+}
+```
+
+\(b\) For the second question in Tutorial 1, use the code to define a function, called F2, where F2 has two arguments: salary and rate. Run function F2 for the two cases mentioned to obtain the results.
+
+```{r}
+F2 <- function(salary, price = 1200000, rate = 0.01, portion_save = 0.4) {
+  r = 0.02 # monthly rate return from investment
+  saved <- 10000 # savings given by parents initially
+  month <- 0
+  cost = 0.25*price
+  while(saved < cost) {
+    month = month +1
+    saved = saved + portion_save * salary + saved * r
+    if (month %% 4 ==0) {
+      salary = salary*(1+rate)
+    }
+  }
+  return(month)
+}
+
+```
+
+#### Onsite Questions
+
+COMING SOON
+
+## Tutorial 4 (Linear Regression 2)
+
+#### Offsite Questions
+
+Consider data set given in the file `hdbresale_reg.csv` on Canvas, which has the information of 6055 HDB resale flats in Singapore. We would want to form a linear model that helps to predict the resale price of HDB flats, based on the floor area in square meters and the type of the flats.
+
+\(a\) Consider the resale price, plot a histogram of it and give your comments. Is it suitable to fit a\
+linear model for this response variable? Explain.
+
+```{r}
+data <- read.csv("hdbresale_reg.csv")
+str(data)
+hist(data$resale_price)
+
+# Comments: 
+# Right-skewed histogram
+# Hence, resale price is NOT suitable to be the response 
+# as assumption of linear model (symmetric) is violated.
+# For a right skewed variable, it is suggested to try 
+# transforming the response by taking its logarithm.
+
+```
+
+\(b\) Consider the resale price, plot a histogram of log_e of it and give your comments. Is it more\
+suitable to fit a linear model for this response variable than the original resale price?
+
+```{r}
+hist(log(data$resale_price))
+
+# Comments: 
+# The histogram of the log of the resale price 
+# is more symmetric, hence it is more suitable than 
+# the original resale price as a response for our linear model.
+
+```
+
+\(c\) Derive a scatter plot of the log_e of the resale price against the floor area in square meters. Give your comments.
+
+```{r}
+# creates a new column for the log(price)
+data$log.price = log(data$resale_price) 
+plot(data$log.price ~ data$floor_area_sqm)
+
+# Comments:
+# There seems to be a strong, positive, linear relationship
+# between log(price) and floor area.
+# The variability of the log(price) seems fairly stable 
+# when the floor area changes.***
+
+```
+
+\(d\) Fit a linear model where the log of the resale price be the response. Write down the fitted equation.
+
+```{r}
+str(data)
+unique(data$flat_type)
+
+M = lm(log.price ~ floor_area_sqm + flat_type, data = data)
+summary(M)
+
+# fitted_log(price) = 
+# 12.35 + 
+# 0.003712 * floor_area_sqm +
+# 0.119 ∗ I(flat type = 3 ROOM) +
+# 0.2093 ∗ I(flat type = 4 ROOM) +
+# 0.2762 ∗ I(flat type = 5 ROOM) +
+# 0.4302 ∗ I(flat type = Executive)
+
+```
+
+\(e\) Report the coeficient of the floor area in square meters and interpret it.
+
+```{r}
+# The coefficient of it is 0.003712. 
+# Meaning when comparing two flats of the same type, 
+# then an increase of 1 square meter will increase 
+# the predicted log(price) by 0.003712.
+# Equivalently, the price will 
+# increase by e^0.003712 = 1.003719 TIMES.
+
+```
+
+\(f\) Predict the resale price of a 4-room HDB at that is of 100 square meters.
+
+```{r}
+new = data.frame(
+  floor_area_sqm = 100, 
+  flat_type = "4 ROOM"
+  )
+
+predicted_log.price = predict(M, new)
+predicted_price = exp(predicted_log.price)
+print(predicted_price) # 412807.6
+```
+
+\(g\) Report $R^2$ of the model and interpret it.
+
+```{r}
+summary(M)$r.squared
+# The R_squared value is 0.712. 
+# That means model M can explain 71.2% 
+# of the variability of the response in the sample.
+
+```
+
+#### Onsite Questions
+
+COMING SOON
+
+## Tutorial 5 (K-Nearest Neighbor)
+
+#### Offsite Questions
+
+1.  (MLR) Consider the horseshoe female crab data given in the csv file `crab.csv`. We would want to form a model for the weight of the female crabs (kg), which depends on its width (cm) and its spine condition (1 = both good, 2 = one worn or broken, 3 = both worn or broken).
+
+    ```{r}
+    data <- read.csv("crab.csv")
+    head(data)
+    str(data)
+    data$spine <- as.factor(data$spine)
+    # 1 = both good
+    # 2 = one worn or broken
+    # 3 = both worn or broken
+    str(data)
+    ```
+
+    \(a\) Produce a scatter plot of variable weight against width for different condition of spine.
+
+    ```{r}
+    attach(data)
+    plot(weight ~ width, pch = 20, main = "weight vs width for each spine class",
+         xlab = "width", ylab = "weight")
+    points(weight[spine == "1"] ~ width[spine =="1"], pch = 15, col = "red")
+    points(weight[spine == "2"] ~ width[spine =="2"], pch = 16, col = "blue")
+    points(weight[spine == "3"] ~ width[spine =="3"], pch = 17, col = "green")
+    legend(22,4,legend=c("1", "2", "3"),col=c("red", "blue", "green"), pch=c(15,16,17))
+    ```
+
+    \(b\) Fit a linear regression model for weight which has two explanatories, width and spine.
+
+    ```{r}
+    model <- lm(weight ~ width + spine, data = data)
+    summary(model)
+    ```
+
+    \(c\) Is the fitted model signicant?
+
+    ```{r}
+    # the model f statistic showing p value is less than 2.2 x 10^-16.
+    # Since this is far below 0.05, the model can be considered significant
+    ```
+
+    \(d\) Derive $R^2$ and adjusted $R^2$ of the fitted model.
+
+    ```{r}
+    summary(model)$r.squared
+    # 0.7917598
+    summary(model)$adj.r.squared
+    # 0.7880632
+    ```
+
+    \(e\) Write down the fitted model.
+
+    ```{r}
+    summary(model)
+    # weight = -3.92955 + 0.24376*width + 0.05544*I(spine=2) -0.06969*I(spine=3)
+    ```
+
+    \(f\) Two female crabs of the same width, and the diference of their weight if one has spines are of good condition and another one with broken spines.
+
+    ```{r}
+    # weight = -3.92955 + 0.24376*width + 0.05544*I(spine=2) + -0.06969*I(spine=3)
+    # weight1 = -3.92955 + 0.24376*width + 0.05544*0 + -0.06969*0
+    # weight2 = -3.92955 + 0.24376*width + 0.05544*0 + -0.06969*1
+
+    weight.dif <- (0.05544*0 + -0.06969*0) - (0.05544*0 + -0.06969*1)
+    weight.dif
+    ```
+
+    \(g\) Predict the weight of a female crab that has width of 27 cm and has both spines worn or broken.
+
+    ```{r}
+    newdata <- data.frame(width = 27, spine = "3")
+    predict(model, newdata = newdata)
+    ```
+
+2.  Measures of classier performance
+
+    Suppose we have developed a K-nearest neighbors classier for predicting diabetes status. The following table shows the actual response $Y$ (1 = yes, 0 =n o) and fitted value $\hat Y$ using the classier for 10 test data points. A test data point is predicted to be $\hat G$= 1 if $\hat Y$ \> δ, for a specied threshold value δ (Recall that we use δ = 0.5 in class, also known as the majority rule).
+
+    ![](images/clipboard-794303694.png){width="254"}
+
+    (a) We define: $TPR = \frac {TP}{TP +FN}$, $FPR = \frac {FP}{FP +TN}$;
+    For each of the thresholds δ = 0.3, 0.6 and 0.8, derive $TPR$ and $FPR$ in making predictions with the K-nearest neighbors classier for the 10 test data points. Plot $TPR$ against $FPR$ for the three thresholds.
+
+    ```{r}
+    y <- c(1,1,0,1,1,0,0,1,0,0)
+    ycap <- c(0.9,0.5,0.7,0.4,0.5,0.2,0.7,0.9,0.1,0.1)
+    tpr.all <- numeric(0)
+    fpr.all <- numeric(0)
+
+    sigma.list <- c(0.3,0.6,0.8)
+    for (sigma in sigma.list) {
+      pred <- ifelse(ycap >= sigma, 1 ,0)
+      confusion.matrix <- table(y, pred)
+      tpr <- confusion.matrix[2,2]/sum(confusion.matrix[2,])
+      fpr <- confusion.matrix[1,2]/sum(confusion.matrix[1,])
+      tpr.all <- append(tpr.all, tpr)
+      fpr.all <- append(fpr.all, fpr)
+    }
+
+    plot(tpr.all ~ fpr.all, pch = 20,
+         xlim = c(0,1),
+         ylim = c(0,1))
+    points(tpr.all[1] ~ fpr.all[1], pch = 15, col = "red")
+    points(tpr.all[2] ~ fpr.all[2], pch = 16, col = "blue")
+    points(tpr.all[3] ~ fpr.all[3], pch = 17, col = "green")
+    legend(0.7,0.4,legend=c("sigma = 0.3", "sigma = 0.6", "sigma = 0.8"),
+           col=c("red", "blue", "green"), pch=c(15,16,17))
+    ```
+
+    \(b\) Can we add the two points (0,0) and (1,1) to the plot of $TPR$ against $FPR$ in part (a). Explain why or why not.
+
+    ```{r}
+    # If σ > 0.9 then all test points have predicted ˆG = 0 (predicted as negative), 
+    # so TPR = FPR = 0.
+    # If σ < 0.1, then all test points have predicted ˆG = 1 (predicted as positive),
+    # so TPR = FPR = 1.
+    # Since there exist σ within the range from 0 to 1 for the two points to happen, 
+    # these two points can be added to the plot.
+    ```
+
+3.  The CSV file `Caravan.csv` contains data on 5822 real customer records on caravan insurance purchase. This data set is owned and supplied by the Dutch data mining company, Sentient Machine Research, and is based on real world business data. Each record consists of 86 variables, containing socio-demographic data (variables 1-43) and product ownership (variables 44-86). Variable 86 (`Purchase`) indicates whether the customer purchased a caravan insurance policy. For this business, assume that the overall error rate (equivalently, the accuracy) is not of interest. Instead, the company wants to use the classier to predict who are the potential customers likely to purchase insurance. Then the metric precision will be important, since it relates the proportion of Individuals who will actually purchase the insurance, among the group of individuals who are predicted to purchase insurance.
+
+    ```{r}
+    cara <- read.csv("Caravan data.csv")
+    head(cara, n = 2)
+    str(cara)
+    dim(cara)
+    ```
+
+    \(a\) Without any classier, if the company tries to sell insurance to a random selection of customers, what is the success rate?
+
+    ```{r}
+    table(cara$Purchase)
+    succesRate <- table(cara$Purchase)[2]/sum(table(cara$Purchase))
+    succesRate
+
+    # data set shows almost 6% of people purchased insurance
+    ```
+
+    \(b\) Standardize the input features. $Hint$: Use `scale()` command in R.
+
+    ```{r}
+    cara <- cara[,-1] #throwing the first column since it provides no information
+    scaled.X <- scale(cara[,-86]) #throwing the response column
+    ```
+
+    \(c\) Randomly select 1000 observations to form the test data, and the remaining observations will be the training data.
+
+    ```{r}
+    set.seed(5)
+    n <- dim(cara)[1] #train data number
+    shuffled.index <- sample(c(1:n), size = 1000)
+    X.train <- scaled.X[-shuffled.index,]
+    X.test<- scaled.X[shuffled.index,]
+    Y.train <- as.factor(cara$Purchase[-shuffled.index])
+    Y.test <- as.factor(cara$Purchase[shuffled.index])
+    ```
+
+    \(d\) Use 1-nearest neighbor classier for the training data to predict if a customer will purchase insurance. Compute the precision of the classier.
+
+    ```{r}
+    library(class)
+
+    pred <- knn(X.train, X.test, Y.train, k=1)
+    confusion.matrix <- table(Y.test, pred) 
+    # Precision = TP/TP+FP
+    precision <- confusion.matrix[2,2]/sum(confusion.matrix[,2])
+    confusion.matrix
+    precision
+    ```
+
+    \(e\) Repeat question 3d, for k-nearest neighbor classier where k = 3,5,10. Which value of k gives the best precision?
+
+    ```{r}
+    precision.all <- data.frame()
+    k.list <- c(3, 5, 10)
+    for (k in k.list) {
+      pred <- knn(X.train, X.test, Y.train, k = k)
+      confusion.matrix <- table(Y.test, pred) 
+      # Precision = TP/TP+FP
+      precision <- confusion.matrix[2,2]/sum(confusion.matrix[,2])
+      precision.all <- rbind(precision.all, data.frame(k, precision))
+    }
+
+    precision.all
+
+    # So far, k = 5 gives the best precision.
+    # However, one might use N -fold cross validation 
+    # to have the average precision for each k.
+    # With that, the value of k that gives largest average precision is chosen.
+    ```
+
+#### Onsite Questions
+
+COMING SOON
+
+## Tutorial 6 (Decision Tree)
+
+#### Offsite Questions
+
+1.  *(KNN and N -fold Cross Validation)*
+
+    Loan managers often need to take into account an applicant's demographic and socioeconomic proles in deciding whether to approve a loan to the applicant, to minimize losses due to defaults. In this exercise we will build and evaluate a classier based on the German Credit Data to predict whether an applicant is considered as having good or bad credit risk. The features or predictors include (1) loan duration (in months), (2) credit amount, (3) Installment rate in percentage of disposable income and (4) age in years.
+
+    \(a\) Read and explore the data from the file `German_credit.csv`.
+
+    ```{r}
+    data <- read.csv("German credit.csv")
+    head(data)
+    str(data)
+    ```
+
+    \(b\) Standardize the input features.
+
+    ```{r}
+    X <- scale(data[-1])
+    Y <- data$Creditability
+    head(X)
+    ```
+
+    \(c\) Randomly select 800 customer records to form the training data, and the remaining 200 records will be the test data.
+
+    ```{r}
+    set.seed(100)
+    n <- dim(data)[1]
+    index <- sample(1:n, 800)
+
+    training.X <- X[index, ]
+    test.X <- X[-index, ]
+    training.Y <- Y[index]
+    test.Y <- Y[-index]
+    ```
+
+    \(d\) Use 1-nearest neighbor classier for the training data to predict if a loan applicant is credible for the 200 test points. Compute the accuracy of the classier.
+
+    ```{r}
+    library(class)
+    pred <- knn(training.X, test.X, training.Y, k=1)
+    confusion.matrix <- table(test.Y, pred)
+    confusion.matrix
+
+    accuracy <- sum(diag(confusion.matrix))/sum(confusion.matrix)
+    accuracy
+    ```
+
+    \(e\) Use N -folds cross validation with N = 5 to find the average accuracy for the 1-nearest neighbor classifier.
+
+    ```{r}
+    library(class)
+    set.seed(100)
+
+    data <- read.csv("German credit.csv")
+    X <- scale(data[-1])
+    Y <- data$Creditability
+
+    n_folds <- 5
+    n <- length(Y)
+    folds_j <- sample(rep(1:n_folds, length.out = n ))
+
+    accuracy <- numeric(n_folds)
+    for (j in 1:n_folds) {
+      test_j <- which(folds_j == j) 
+      test.y <- Y[test_j] 
+      train.X <- X[-test_j, ]  
+      test.X <- X[test_j, ]  
+      train.y <- Y[-test_j] 
+        
+      knn.pred <- knn(train.X, test.X, train.y, k = 1) 
+        
+      confusion.matrix <- table(test.y, knn.pred)
+      accuracy[j] <- sum(diag(confusion.matrix))/sum(confusion.matrix)
+    }
+
+    ave.accuracy <- round(mean(accuracy), digits = 3)
+    ave.accuracy
+    ```
+
+    \(f\) Repeat question 1e for K-nearest neighbor classifiers where K = 1, 2, ...100.
+
+    ```{r}
+
+    ### FULL KNN WITH N-FOLDS VALIDATION
+    library(class)
+    set.seed(100)
+
+    data <- read.csv("German credit.csv")
+    X <- scale(data[-1])
+    Y <- data$Creditability
+
+    k <- 100
+    n_folds <- 5
+    n <- length(Y)
+    folds_j <- sample(rep(1:n_folds, length.out = n ))
+    ave.accuracy <- numeric(length(k))
+
+    for (i in 1:k) {
+      accuracy <- numeric(n_folds)
+      for (j in 1:n_folds) {
+        test_j <- which(folds_j == j) 
+        test.y <- Y[test_j] 
+        train.X <- X[-test_j, ]  
+        test.X <- X[test_j, ]  
+        train.y <- Y[-test_j] 
+        
+        knn.pred <- knn(train.X, test.X, train.y, k = i) 
+        
+        confusion.matrix=table(test.y, knn.pred)
+        accuracy[j] <- sum(diag(confusion.matrix))/sum(confusion.matrix)
+      }
+      ave.accuracy[i] <- round(mean(accuracy), digits = 3)
+    }
+
+    ave.accuracy
+    ```
+
+    \(g\) Compare the 100 classifiers above, which few values of K give the best average accuracy?
+
+    ```{r}
+
+    library(glue)
+    index = which(ave.accuracy == max(ave.accuracy))
+    plot(x = 1:k, ave.accuracy)
+    abline(v = index, col = "red")
+    glue("most accurate k = {index} with average accuracy = {ave.accuracy[index]}")
+    ```
+
+2.  *(Decision Trees)*
+
+    Consider the famous Iris Flower Data set which was rst introduced in 1936 by the famous statistician Ronald Fisher. This data set consists of 50 observations from each of three species of Iris (Iris setosa, Iris virginica and Iris versicolor). Four features were measured from each observation: the length and the width of the sepals and petals (in cm).
+
+    ![](images/clipboard-1563154089.png)
+
+    \(a\) Use decision tree method to predict Iris species based on all four features.
+
+    ```{r}
+    iris <- read.csv("Iris dataset.csv")
+    head(iris)
+    str(iris)
+    dim(iris)
+
+    library(rpart)
+    fit <- rpart(class ~ sepal.length + sepal.width + petal.length + petal.width,
+                  data = iris,
+                  method="class",
+                  parms=list(split='information'),
+                  control = rpart.control( minsplit =1))
+    ```
+
+    \(b\) Visualize the decision tree above, using the `rpart.plot` function.
+
+    ```{r}
+    library(rpart.plot)
+    rpart.plot(fit, type=4, extra=2)
+               
+    # The fitted tree is given in the figure below.
+    # If the measurement of petal length is less than 2.5 cm 
+    # then the flower is of Iris-setosa
+    # If the petal length is ≥ 2.5 cm with the petal width is ≥ 1.8 cm 
+    # then high chance (45/46) it will be an Iris-virginica.
+    # If the petal length is ≥ 2.5 cm with the petal width is < 1.8 cm
+    # then we continue to check if the petal length is in the interval
+    # [2.5, 5]. If yes, then high chance (47/48) it is Iris-versicolor.
+    ```
+
+    \(c\) What are the more important features in the fitted tree above?
+
+    ```{r}
+    # It seems the sepal length and sepal width 
+    # are not important in the classification while
+    # the petal length and petal width are more important.
+    ```
+
+------------------------------------------------------------------------
+
+# Past Year Papers
+
+## Y(22/23) S2
+
+### Questions 1 *(50 points)*
+
+A study of nesting horseshoe crabs (J. Rrockmann, Ethology, 102: 1-21, 1996) collected data on 173 female horseshoe crabs. Explanatory variables included the female crab's `color` (2,3,4 and 5 which increases when the darkness increases), spine condition, `weight` (kg), and carapace `width` (cm).
+
+Variable `satell` indicates the number of male crab (called satellite) attached to the female crabs (for example, the first crab has 8 satellites attached to it). In this problem, we are interested in the possible factors like `color`, `weight` and `width` that may affect the number of satellites attach to a female crab.
+
+Data are given in the file `data1.txt`.
+
+Import the given data into **R** and keep all the variable names as original.
+
+```{r}
+data<-read.table('data1.txt', header=T) 
+head(data)
+dim(data)
+names(data)
+attach(data)
+```
+
+**Part I**: Exploring the response variable - `satell`
+
+1.  Create a histogram of this variable with a normal density curve overlaying. Give your comment about this plot.
+
+    ```{r}
+
+    hist(satell, probability = TRUE, 
+         main = "Histogram of Satell with Normal Density Curve",
+         xlab = "Number of Satellites", col = "lightblue", border = "black")
+
+    x_values <- seq(min(satell), max(satell), length = 100)
+    y_values <- dnorm(x_values, mean = mean(satell), sd = sd(satell))
+    lines(x_values, y_values, col = "red", lwd = 2)
+
+    # Comments:
+    # The histogram of the satell variable shows values ranging from 0 to 15, 
+    # with a single peak (unimodal) where most of the data is concentrated around 1. 
+    # The distribution is clearly right-skewed, no gap.
+    # There are a few suspected outliers on the far right, with values around 15.
+
+    ```
+
+2.  Create a box plot of this variable. Does it show any outliers? If yes, retrieve the full information (full row) of the crabs that are outliers in number of satellites. Copy the information and paste into R code file as comments.
+
+    ```{r}
+    boxplot(satell)
+    out <- boxplot(satell)$out; out
+    index <- which(satell %in% out)
+    data[index,]
+    # There are two outliers, as following:
+    # color spine width satell weight
+    # 15     3     1  26.0     14    2.3
+    # 56     3     3  28.3     15    3.0
+
+    ```
+
+3.  Create a qq plot of this variable. Give your comment about this plot.
+
+    ```{r}
+    qqnorm(satell,  pch = 20)
+    qqline(satell, col = "red")
+
+    # Comments:
+    # Observed values on the left are clearly higher then the expected values,
+    # meaning the data has shorter left tail.
+    # Hence, satell data is not normally distributed
+    ```
+
+**Part II**: Variable color
+
+4.  Write the code to create a new categorical variable, `col`, which equals to light if the crab has color 2 or 3, and equals to dark if the crab has color 4 or 5.
+
+    ```{r}
+
+    data$col <- numeric(length(satell))
+    data$col[which(color <= 3)] <- "light"
+    data$col[which(color > 3)] <- "dark"
+
+    head(data)
+    attach(data)
+    ```
+
+5.  Create a frequency table for variable `col` created above. How many crabs are of light color and how many crabs are of dark color?
+
+    ```{r}
+    table(col)
+    ```
+
+6.  Plot a scatter plot of `weight` and `satell`, classified by `col`. Add a legend box for this plot. Give your comment about this plot.
+
+    ```{r}
+    plot(satell ~ weight, 
+         type = "n",
+         xlab="Weight",
+         ylab="Satell", 
+         main = "Crab Data")
+
+    points(satell[col == "light"] ~ weight[col == "light"], pch = 20, col = "red")
+    points(satell[col == "dark"] ~ weight[col == "dark"], pch = 20, col = "blue")
+    legend(4.5, 15, legend=c("light", "dark"),col = c("red", "blue"), pch = 20)
+
+    # Comments:
+    # Overall, weight and satell has (quiet weak) POSITIVE
+    # and possibily LINEAR relationship.
+    # For light color or for dark color, the relationship between satell and weight
+    # are about similar, no clear difference
+    # as weight changes, the variability of satell gets larger
+
+
+    ```
+
+**Part III**: Modelling
+
+7.  Fit a linear regression model for `satell` using three features `color`, `weight` and `width`.
+
+    ```{r}
+    data$color = as.factor(data$color)
+    M = lm(satell ~ color + weight + width, data = data)
+    ```
+
+8.  Report the value of $R^2$ of the model above. Give your comments on the goodness-of-fit of the model.
+
+    ```{r}
+    summary(M)
+
+    # Comments:
+    # R^2 = 0.1492
+    # Though F-test for the significance of the overall  model: model is significant
+    # However, R^2 is too low. It means model doesn't fit the data well.
+    ```
+
+### Questions 2 *(30 points)*
+
+A data set `data2.csv` contains cases from a study that was conducted between 1958 and 1970 at the University of Chicago's Billings Hospital on the survival of patients who had undergone surgery for breast cancer.
+
+A table of variable description is given below. `status` is the response in this study.
+
++---------------+------------------------------------------------------------+
+| Variable      | Description                                                |
++:==============+============================================================+
+| age           | age of patient at which they undergone surgery             |
++---------------+------------------------------------------------------------+
+| year          | year in which patient was undergone surgery (1958 - 1969)  |
++---------------+------------------------------------------------------------+
+| node          | number of lymph nodes that have cancer cells detected      |
++---------------+------------------------------------------------------------+
+| status        | 1 = the patient survived 5 years or longer (negative); and |
+|               |                                                            |
+|               | 2 = the patient died within 5 years (positive)             |
++---------------+------------------------------------------------------------+
+
+For this problem, we will not consider the year when patient was undergone the surgery, `year`, as a feature for classification.
+
+In R, use `set.seed(999)`.
+
+We would:
+
+-   Use KNN algorithm where K can be any positive integers, from 1 up to 50, to form classifiers to predict the outcome.
+
+-   For each classier, evaluate it's performance by 3-fold cross validation.
+
+-   Use type I error rate and type II error rate as the measures to evaluate each classifiers.
+
+-   Select the best K.
+
+    ```{r}
+    set.seed(999)
+
+    hab <- read.csv('data2.csv')
+    head(hab)
+    dim(hab)
+    names(hab)[4] = "status"
+
+    hab$status = as.factor(hab$status)
+    hab[, 1:3] = lapply(hab[ , 1:3],scale) # SCALING THE FEATURES
+
+    attach(hab)
+    table(status)
+    ```
+
+1.  Write the code for the purposes above. For each classier, the average of Type I error rates from 3-fold cross validation is saved in a vector, (named `ave.type1`); and the average of Type II error rates is saved in another vector (named `ave.type2`).
+
+    ```{r}
+    library(class)
+
+    X <- hab[, c(1,3)] # we do not use the 2nd column, year.
+    Y <- hab[, 4] # response
+
+    n <- length(Y) # sample size
+    n_folds <- 3
+    folds_j <- sample(rep(1:n_folds, length.out = n ))
+    table(folds_j)
+
+    K = 50
+    ave.type1 = numeric(K) # to store the accuracy for each k of KNN, k is from 1 to K = 50.
+    ave.type2 = numeric(K) # to store the precision for each k of KNN
+    type1=numeric(n_folds)
+    type2=numeric(n_folds)
+
+    for(i in 1:K) {
+      for (j in 1:n_folds) {
+      	test_j <- which(folds_j == j) # get the index of the points that will be in the test set
+        test.y = Y[test_j] # response for the test points
+      	knn.pred <- knn(train=X[ -test_j, ], test=X[test_j, ], cl=Y[-test_j ], k=i) 
+        confusion.matrix=table(test.y, knn.pred) # 2 = positive and 1 = negative
+      
+      	type1[j] = confusion.matrix[1,2]/sum(confusion.matrix[1,]) # row 1 means actual negative
+      	type2[j] = confusion.matrix[2,1]/sum(confusion.matrix[2,]) # row 2 means actual positive
+      }
+            ave.type1[i] = round(mean(type1), digits = 3)
+            ave.type2[i] = round(mean(type2), digits = 3)
+    }
+
+    ave.type1
+    ave.type2
+    ```
+
+2.  Report the length of vector `ave.type1` and the length of vector `ave.type2`.
+
+    ```{r}
+    length(ave.type1) # 50, same as K
+    length(ave.type2) # 50, same as K
+    ```
+
+3.  Write the code to produce a scatter plot where `ave.type1` is in X-axis and `ave.type2` is in Y-axis.
+
+    ```{r}
+    plot(ave.type1, ave.type2, pch = 20)
+    ```
+
+4.  For this study, we assume that type I error can be tolerated while type II error is not. Which value of K would you choose among the three smallest type II error rate, yet the type I error rate is not larger than 15%? Report the type I and type II error rate for that value of K.
+
+    ```{r}
+    sort(ave.type2)[1:3] 
+    # index of K that produced three smallest type 2 error
+    index = which(ave.type2 %in% c(sort(ave.type2)[1:3])) 
+    index
+
+    # values of type 1 error for those K with 3 smallest type 2 error
+    ave.type1[index] 
+    # among those values of K, we choose the one that gives types 1 error smaller than 15%
+    # values of K could be chosen are: 2, 5
+    # since K = 2 gives second smallest type 2 error = 63.4% with type 1 error = 14.2%,
+    # and K = 5 gives third smalles type 2 error = 64% with type 1 error = 11.1%.
+    ```
+
+## Y(23/24) S1

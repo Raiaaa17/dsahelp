@@ -1,0 +1,22 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "DSARAY"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+
+format:
+  html:
+    css: styles.css
+    toc: true
+    toc-depth: 2
+    toc-location: right
+    theme: sketchy
+
+
+editor: visual
+
