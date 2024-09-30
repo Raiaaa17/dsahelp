@@ -497,7 +497,8 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="linear-regression-model">Linear Regression Model</h2>
 <p>There are assumptions have to be fulfilled before using linear model:</p>
 <ol type="1">
-<li><p>Quantitative response (check through str() function)</p></li>
+<li><p>Quantitative response (check through str() function)</p>
+<p>Remember to <code>as.factor()</code> categorical features</p></li>
 <li><p>Symmetric (check through histogram and/or qqplot)</p></li>
 <li><p>Variability of y is stable when x changes (check through scatterplot)</p></li>
 </ol>
@@ -533,12 +534,49 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
+<p>To evaluate goodness of fit, we consider F-test and <span class="math inline">\(R^2\)</span>. When comparing models however, use adjusted <span class="math inline">\(R^2\)</span></p>
+<p><img src="images/clipboard-1113485621.png" class="img-fluid"></p>
 </section>
 <section id="k-nearest-neighbor-knn-model" class="level2">
 <h2 class="anchored" data-anchor-id="k-nearest-neighbor-knn-model">K-Nearest Neighbor (KNN) Model</h2>
+<p>There are some important steps when doing KNN:</p>
+<ol type="1">
+<li>Importing the required library
+<ul>
+<li><code>library(class)</code></li>
+</ul></li>
+<li>Standardizing NUMERIC input features.
+<ul>
+<li>Very important, especially when they are in different magnitudes.</li>
+<li>Use <code>scale()</code> Function</li>
+</ul></li>
+<li>Randomly split original data to train and test set.
+<ul>
+<li>Usually 80% train and 20% split.</li>
+<li>Use <code>shuffle()</code> function</li>
+<li>Remember to <code>set.seed()</code></li>
+</ul></li>
+</ol>
+<p>To evaluate goodness of fit, N-fold cross validation is usually do to. It’s a fair way to evaluate most of classifier models. Confusion matrix is also used to check accuracy, precision, etc.</p>
+<p><em>Bayes decision boundary</em> (the gold standard decision boundary) is also often used to check the goodness of fit, especially in choosing the right K.</p>
+<ul>
+<li><p>Small K (more flexibility): When K is small, like K = 1, the KNN model is more flexible, fitting the data closely and capturing non-linear patterns. This allows it to adapt better to local variations in the data, which is important for non-linear decision boundaries. However, small KKK values can also make the model more sensitive to noise and prone to overfitting.</p></li>
+<li><p>Large K (More Smoothing): A large K smooths out the decision boundary because the prediction is averaged over more neighbors. This can be useful for linear or simple decision boundaries, but in the case of highly non-linear boundaries, a large K would result in underfitting, where the model oversimplifies the decision boundary and fails to capture the complex patterns.</p></li>
+</ul>
+<p><img src="images/clipboard-2254413627.png" class="img-fluid"></p>
 </section>
 <section id="decision-tree-model" class="level2">
 <h2 class="anchored" data-anchor-id="decision-tree-model">Decision Tree Model</h2>
+<p>There are some important steps when doing Decision Tree:</p>
+<ol type="1">
+<li>importing the required library
+<ul>
+<li><code>library(rpart)</code> : minsplit, maxdepth, cp</li>
+<li><code>library(rpart.plot)</code> : varlen, faclen</li>
+</ul></li>
+<li>Understanding the fitted tree. It’s crucial to know the how and why of the fitted tree to avoid bias</li>
+</ol>
+<p>To evaluate goodness of fit, N-fold cross validation can do. But most of the times confusion matrix is used.</p>
 </section>
 <section id="confusion-matrix" class="level2">
 <h2 class="anchored" data-anchor-id="confusion-matrix">Confusion Matrix</h2>

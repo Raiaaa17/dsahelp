@@ -243,6 +243,8 @@ There are assumptions have to be fulfilled before using linear model:
 
 1.  Quantitative response (check through str() function)
 
+    Remember to `as.factor()` categorical features
+
 2.  Symmetric (check through histogram and/or qqplot)
 
 3.  Variability of y is stable when x changes (check through scatterplot)
@@ -259,9 +261,44 @@ If data is found to be asymmetric, can do transformation: log(Y), sqrt(Y), 1/Y
 | new_Y \<- 1/Y       | Y can't be 0              | pred \<- 1/pred        |
 +---------------------+---------------------------+------------------------+
 
+To evaluate goodness of fit, we consider F-test and $R^2$. When comparing models however, use adjusted $R^2$
+
+![](images/clipboard-1113485621.png)
+
 ## K-Nearest Neighbor (KNN) Model
 
+There are some important steps when doing KNN:
+
+1.  Importing the required library
+    -   `library(class)`
+2.  Standardizing NUMERIC input features.
+    -   Very important, especially when they are in different magnitudes.
+    -   Use `scale()` Function
+3.  Randomly split original data to train and test set.
+    -   Usually 80% train and 20% split.
+    -   Use `shuffle()` function
+    -   Remember to `set.seed()`
+
+To evaluate goodness of fit, N-fold cross validation is usually do to. It's a fair way to evaluate most of classifier models. Confusion matrix is also used to check accuracy, precision, etc.
+
+*Bayes decision boundary* (the gold standard decision boundary) is also often used to check the goodness of fit, especially in choosing the right K.
+
+-   Small K (more flexibility): When K is small, like K = 1, the KNN model is more flexible, fitting the data closely and capturing non-linear patterns. This allows it to adapt better to local variations in the data, which is important for non-linear decision boundaries. However, small KKK values can also make the model more sensitive to noise and prone to overfitting.
+
+-   Large K (More Smoothing): A large K smooths out the decision boundary because the prediction is averaged over more neighbors. This can be useful for linear or simple decision boundaries, but in the case of highly non-linear boundaries, a large K would result in underfitting, where the model oversimplifies the decision boundary and fails to capture the complex patterns.
+
+![](images/clipboard-2254413627.png)
+
 ## Decision Tree Model
+
+There are some important steps when doing Decision Tree:
+
+1.  importing the required library
+    -   `library(rpart)` : minsplit, maxdepth, cp
+    -   `library(rpart.plot)` : varlen, faclen
+2.  Understanding the fitted tree. It's crucial to know the how and why of the fitted tree to avoid bias
+
+To evaluate goodness of fit, N-fold cross validation can do. But most of the times confusion matrix is used.
 
 ## Confusion Matrix
 

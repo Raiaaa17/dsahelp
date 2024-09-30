@@ -67,21 +67,21 @@
     "href": "index.html#linear-regression-model",
     "title": "DSA1101: Everything You Need",
     "section": "Linear Regression Model",
-    "text": "Linear Regression Model\nThere are assumptions have to be fulfilled before using linear model:\n\nQuantitative response (check through str() function)\nSymmetric (check through histogram and/or qqplot)\nVariability of y is stable when x changes (check through scatterplot)\n\nIf data is found to be asymmetric, can do transformation: log(Y), sqrt(Y), 1/Y\n\n\n\n\n\n\n\n\nTransformation\nRestriction\nReverse Transformation\n\n\n\n\nnew_Y &lt;- log(Y)\nY can’t be 0 nor negative\npred &lt;- exp(pred)\n\n\nnew_Y &lt;- sqrt(Y)\nY can’t be negative\npred &lt;- pred**2\n\n\nnew_Y &lt;- 1/Y\nY can’t be 0\npred &lt;- 1/pred"
+    "text": "Linear Regression Model\nThere are assumptions have to be fulfilled before using linear model:\n\nQuantitative response (check through str() function)\nRemember to as.factor() categorical features\nSymmetric (check through histogram and/or qqplot)\nVariability of y is stable when x changes (check through scatterplot)\n\nIf data is found to be asymmetric, can do transformation: log(Y), sqrt(Y), 1/Y\n\n\n\n\n\n\n\n\nTransformation\nRestriction\nReverse Transformation\n\n\n\n\nnew_Y &lt;- log(Y)\nY can’t be 0 nor negative\npred &lt;- exp(pred)\n\n\nnew_Y &lt;- sqrt(Y)\nY can’t be negative\npred &lt;- pred**2\n\n\nnew_Y &lt;- 1/Y\nY can’t be 0\npred &lt;- 1/pred\n\n\n\nTo evaluate goodness of fit, we consider F-test and \\(R^2\\). When comparing models however, use adjusted \\(R^2\\)"
   },
   {
     "objectID": "index.html#k-nearest-neighbor-knn-model",
     "href": "index.html#k-nearest-neighbor-knn-model",
     "title": "DSA1101: Everything You Need",
     "section": "K-Nearest Neighbor (KNN) Model",
-    "text": "K-Nearest Neighbor (KNN) Model"
+    "text": "K-Nearest Neighbor (KNN) Model\nThere are some important steps when doing KNN:\n\nImporting the required library\n\nlibrary(class)\n\nStandardizing NUMERIC input features.\n\nVery important, especially when they are in different magnitudes.\nUse scale() Function\n\nRandomly split original data to train and test set.\n\nUsually 80% train and 20% split.\nUse shuffle() function\nRemember to set.seed()\n\n\nTo evaluate goodness of fit, N-fold cross validation is usually do to. It’s a fair way to evaluate most of classifier models. Confusion matrix is also used to check accuracy, precision, etc.\nBayes decision boundary (the gold standard decision boundary) is also often used to check the goodness of fit, especially in choosing the right K.\n\nSmall K (more flexibility): When K is small, like K = 1, the KNN model is more flexible, fitting the data closely and capturing non-linear patterns. This allows it to adapt better to local variations in the data, which is important for non-linear decision boundaries. However, small KKK values can also make the model more sensitive to noise and prone to overfitting.\nLarge K (More Smoothing): A large K smooths out the decision boundary because the prediction is averaged over more neighbors. This can be useful for linear or simple decision boundaries, but in the case of highly non-linear boundaries, a large K would result in underfitting, where the model oversimplifies the decision boundary and fails to capture the complex patterns."
   },
   {
     "objectID": "index.html#decision-tree-model",
     "href": "index.html#decision-tree-model",
     "title": "DSA1101: Everything You Need",
     "section": "Decision Tree Model",
-    "text": "Decision Tree Model"
+    "text": "Decision Tree Model\nThere are some important steps when doing Decision Tree:\n\nimporting the required library\n\nlibrary(rpart) : minsplit, maxdepth, cp\nlibrary(rpart.plot) : varlen, faclen\n\nUnderstanding the fitted tree. It’s crucial to know the how and why of the fitted tree to avoid bias\n\nTo evaluate goodness of fit, N-fold cross validation can do. But most of the times confusion matrix is used."
   },
   {
     "objectID": "index.html#confusion-matrix",
