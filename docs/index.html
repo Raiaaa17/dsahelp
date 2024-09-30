@@ -602,15 +602,12 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="tutorial-1-introduction-to-r">Tutorial 1 (Introduction to R)</h2>
 <section id="offsite-questions" class="level4">
 <h4 class="anchored" data-anchor-id="offsite-questions">Offsite Questions</h4>
-<p>General idea of this problem: You have just graduated from NUS and just started your first job. You plan to buy a at on your own which has price = $1,200,000 (1.2 million dollars). You need to save money for several years before you can aord to make the down payment which is 25% of the at’s price.</p>
+<p>General idea of this problem: You have just graduated from NUS and just started your first job. You plan to buy a flat on your own which has price = $1,200,000 (1.2 million dollars). You need to save money for several years before you can afford to make the down payment which is 25% of the flat’s price.</p>
 <ul>
 <li>Call the amount that you have saved thus far: <strong>saved</strong>. You start the very first month with a savings of $10,000 that your parents gave you.</li>
-</ul>
-<!-- -->
-<ul>
-<li><p>Call your monthly salary as <strong>salary</strong> which is paid at the end of every month. Each month, you are going to dedicate 40% of your salary to save for the down payment.</p></li>
-<li><p>Assume that you invest your savings wisely, with a monthly average return of 2%. That means: at the end of each month, you receive an additional of <strong>saved</strong> ×0.02 funds where <strong>saved</strong> is the amount you have from end of previous month to put into your savings.</p></li>
-<li><p>At the end of each month, your savings will be increased by the return on your investment, plus 40% of your monthly salary.</p></li>
+<li>Call your monthly salary as <strong>salary</strong> which is paid at the end of every month. Each month, you are going to dedicate 40% of your salary to save for the down payment.</li>
+<li>Assume that you invest your savings wisely, with a monthly average return of 2%. That means: at the end of each month, you receive an additional of <strong>saved</strong> ×0.02 funds where <strong>saved</strong> is the amount you have from end of previous month to put into your savings.</li>
+<li>At the end of each month, your savings will be increased by the return on your investment, plus 40% of your monthly salary.</li>
 </ul>
 <p>Note: In your code for the questions below, you MUST use the names as given in bold above.</p>
 <ol type="1">
@@ -987,7 +984,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="tutorial-4-linear-regression-2">Tutorial 4 (Linear Regression 2)</h2>
 <section id="offsite-questions-3" class="level4">
 <h4 class="anchored" data-anchor-id="offsite-questions-3">Offsite Questions</h4>
-<p>Consider data set given in the file <code>hdbresale_reg.csv</code> on Canvas, which has the information of 6055 HDB resale flats in Singapore. We would want to form a linear model that helps to predict the resale price of HDB flats, based on the floor area in square meters and the type of the flats.</p>
+<p>Consider data set given in the file <code>hdbresale_reg.csv</code> on Canvas, which has the information of 6055 HDB resale flats in Singapore. We would want to form a linear model that helps to predict the resale price of HDB flats, based on the floor area in square meters and the type of the flats.</p>
 <p>(a) Consider the resale price, plot a histogram of it and give your comments. Is it suitable to fit a<br>
 linear model for this response variable? Explain.</p>
 <div class="cell">
@@ -1038,7 +1035,7 @@ suitable to fit a linear model for this response variable than the original resa
 <span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="co"># is more symmetric, hence it is more suitable than </span></span>
 <span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="co"># the original resale price as a response for our linear model.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>(c) Derive a scatter plot of the log_e of the resale price against the floor area in square meters. Give your comments.</p>
+<p>(c) Derive a scatter plot of the log_e of the resale price against the floor area in square meters. Give your comments.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creates a new column for the log(price)</span></span>
 <span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>log.price <span class="ot">=</span> <span class="fu">log</span>(data<span class="sc">$</span>resale_price) </span>
@@ -1112,7 +1109,7 @@ F-statistic:  2986 on 5 and 6049 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb87-6"><a href="#cb87-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 0.2762 ∗ I(flat type = 5 ROOM) +</span></span>
 <span id="cb87-7"><a href="#cb87-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 0.4302 ∗ I(flat type = Executive)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>(e) Report the coeficient of the floor area in square meters and interpret it.</p>
+<p>(e) Report the coefficient of the floor area in square meters and interpret it.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The coefficient of it is 0.003712. </span></span>
 <span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Meaning when comparing two flats of the same type, </span></span>
@@ -1121,7 +1118,7 @@ F-statistic:  2986 on 5 and 6049 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Equivalently, the price will </span></span>
 <span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a><span class="co"># increase by e^0.003712 = 1.003719 TIMES.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>(f) Predict the resale price of a 4-room HDB at that is of 100 square meters.</p>
+<p>(f) Predict the resale price of a 4-room HDB flat that is of 100 square meters.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>new <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
 <span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">floor_area_sqm =</span> <span class="dv">100</span>, </span>

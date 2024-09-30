@@ -320,16 +320,11 @@ Welcome to the ***tutorial zone***—aka the place where I’ve had my biggest l
 
 #### Offsite Questions
 
-General idea of this problem: You have just graduated from NUS and just started your first job. You plan to buy a at on your own which has price = \$1,200,000 (1.2 million dollars). You need to save money for several years before you can aord to make the down payment which is 25% of the at's price.
+General idea of this problem: You have just graduated from NUS and just started your first job. You plan to buy a flat on your own which has price = \$1,200,000 (1.2 million dollars). You need to save money for several years before you can afford to make the down payment which is 25% of the flat's price.
 
 -   Call the amount that you have saved thus far: **saved**. You start the very first month with a savings of \$10,000 that your parents gave you.
-
-<!-- -->
-
 -   Call your monthly salary as **salary** which is paid at the end of every month. Each month, you are going to dedicate 40% of your salary to save for the down payment.
-
 -   Assume that you invest your savings wisely, with a monthly average return of 2%. That means: at the end of each month, you receive an additional of **saved** ×0.02 funds where **saved** is the amount you have from end of previous month to put into your savings.
-
 -   At the end of each month, your savings will be increased by the return on your investment, plus 40% of your monthly salary.
 
 Note: In your code for the questions below, you MUST use the names as given in bold above.
@@ -645,7 +640,7 @@ COMING SOON
 
 #### Offsite Questions
 
-Consider data set given in the file `hdbresale_reg.csv` on Canvas, which has the information of 6055 HDB resale flats in Singapore. We would want to form a linear model that helps to predict the resale price of HDB flats, based on the floor area in square meters and the type of the flats.
+Consider data set given in the file `hdbresale_reg.csv` on Canvas, which has the information of 6055 HDB resale flats in Singapore. We would want to form a linear model that helps to predict the resale price of HDB flats, based on the floor area in square meters and the type of the flats.
 
 \(a\) Consider the resale price, plot a histogram of it and give your comments. Is it suitable to fit a\
 linear model for this response variable? Explain.
@@ -677,7 +672,7 @@ hist(log(data$resale_price))
 
 ```
 
-\(c\) Derive a scatter plot of the log_e of the resale price against the floor area in square meters. Give your comments.
+\(c\) Derive a scatter plot of the log_e of the resale price against the floor area in square meters. Give your comments.
 
 ```{r}
 # creates a new column for the log(price)
@@ -711,7 +706,7 @@ summary(M)
 
 ```
 
-\(e\) Report the coeficient of the floor area in square meters and interpret it.
+\(e\) Report the coefficient of the floor area in square meters and interpret it.
 
 ```{r}
 # The coefficient of it is 0.003712. 
@@ -723,7 +718,7 @@ summary(M)
 
 ```
 
-\(f\) Predict the resale price of a 4-room HDB at that is of 100 square meters.
+\(f\) Predict the resale price of a 4-room HDB flat that is of 100 square meters.
 
 ```{r}
 new = data.frame(
