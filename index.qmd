@@ -15,7 +15,7 @@ format:
 editor: visual
 ---
 
-Hi! I’m Ray! Welcome to your ultimate DSA1101 survival guide! 🎉 Whether you’re new to data science or leveling up for finals, this helpsheet blog has bite-sized tips, easy code, and all the cheat codes you need. 🚀 From data wrangling to machine learning, I’ve got you covered. Ready to dive in? Let’s go! 😎
+kalo merasa berguna boleh paynow aku pls
 
 # General Notes
 
