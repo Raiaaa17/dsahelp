@@ -1,324 +1,174 @@
 ---
-title: "DSA1101: Everything You Need"
+title: "DSA1101 FINAL: Everything I Need"
+navbar:
+    left:
+      - href: index.qmd
+        text: Home
+format: 
+  html: 
+      toc: true
+      toc-depth: 3
+      toc-expand: 4
+      toc-location: right
+      fig-align: center
+      theme: sketchy
 editor: visual
-editor_options: 
-  chunk_output_type: inline
 ---
 
-Hi! I'm Ray! Welcome to your ultimate DSA1101 survival guide! 🎉 Whether you're new to data science or leveling up for midterms, this helpsheet blog has bite-sized tips, easy code, and all the cheat codes you need. 🚀 From data wrangling to machine learning, I've got you covered. Ready to dive in? Let’s go! 😎
+Hi! I’m Ray! Welcome to your ultimate DSA1101 survival guide! 🎉 Whether you’re new to data science or leveling up for finals, this helpsheet blog has bite-sized tips, easy code, and all the cheat codes you need. 🚀 From data wrangling to machine learning, I’ve got you covered. Ready to dive in? Let’s go! 😎
 
-# Getting Started
+# General Notes
 
-## Working Directory
+### Bayes Theorem
 
-```{r}
+Suppose that 5% of all emails are spams. The phrase "you are a winner" occurs in 50% spam emails, and in 10% of non-spam emails.
 
-# setwd("/Users/rayana/Documents/DSA1101/")
-# getwd()
+![](images/clipboard-2431012875.png)
 
-```
+### Odds and Odds Ratio
 
-## Reading File
+1.  Interpreting the Value of Odds Ratio:
 
-```{r}
+    -   OR = 1: The odds of the event are the same in both groups; no association between the exposure and the outcome.
+    -   OR \> 1: The event is more likely to occur in Group 1 than in Group 2. A higher odds ratio indicates a stronger association.
+    -   OR \< 1: The event is less likely to occur in Group 1 than in Group 2, indicating a negative association or a protective effect.
 
-data <- read.table("crab.csv", header = FALSE, sep = "")
-data <- read.csv("crab.csv", header = TRUE, sep = ",") 
+2.  Practical Example: Suppose you are studying whether smoking (exposure) is associated with lung cancer (outcome):
 
-# Reading a tab-separated file
-data <- read.delim("crab.csv")
-data <- read.csv("crab.csv", sep = "\t") 
-```
+    -   If the OR = 2.5, it means smokers are 2.5 times more likely to develop lung cancer than non-smokers.
+    -   If the OR = 0.5, it means smokers are half as likely (or have a 50% reduced odds) to develop lung cancer compared to non-smokers.
 
-## Common Plots
+Example in Context:
 
-```{r}
+| Group       | Outcome = Yes | Outcome = No | Odds             |
+|-------------|---------------|--------------|------------------|
+| Exposed     | 30            | 70           | ( 30/70 = 0.43 ) |
+| Not Exposed | 15            | 85           | ( 15/85 = 0.18 ) |
 
-# pie.chart <- pie(x, labels, radius, main, col, clockwise)
-# bar.chart <- barplot(H, xlab, ylab, main, names.arg, col)
-# box.chart <- boxplot(x, data, notch, varwidth, names, main)
-# histogram <- hist(v, main, xlab, xlim, ylim, breaks, col, border)
-# linegraph <- plot(v, type, col, xlab, ylab)
-# scatterplot <- plot(x, y, xlab, ylab, xlim, ylim, axes)
+Odds ratio:
 
-```
+$\text{OR} = \frac{0.43}{0.18} \approx 2.39$
 
-## Uselful Functions
+-   Interpretation: The odds of the outcome (e.g., disease) are 2.39 times higher for the exposed group compared to the non-exposed group.
 
-Here are some functions that will make your life so much easier—but let's be real, you probably forget how to use them half the time! 😅
+### Confusion Matrix
 
-### Function: ifelse()
+![](images/clipboard-519856922.png)
 
-```{r}
-x <- 1:10
-x <- ifelse(x %% 2 == 0, "even", "odd")
-x
-```
+![](images/clipboard-220838721.png)
 
-### Function: which()
+### Renaming Column by Names and Index
 
-```{r}
-df <- data.frame(
-x = c(1, 2, 3, 4, 5), 
-y = c(5, 4, 3, 2, 1))
+`names(data)[names(data) == "old_name"] <- "new_name"`
 
-rows <- which(df$x > 3)
-rows
-```
+`names(data)[1] <- "new_name"`
 
-### Function: append()
+### Models Characteristics
 
-```{r}
-vec <- c(1, 2)
-combined_vec <- append(vec, 3)
-combined_vec
-```
+#### **K-Nearest Neighbors (KNN)**
 
-------------------------------------------------------------------------
+**Pros**
 
-# Interpreting Graphical Data
+-   **Non-parametric**: Makes no assumptions about the underlying data distribution.
+-   **Handles Nonlinear Boundaries**: Works well for complex decision boundaries.
 
-Some questions will require us to give comments regarding the plotted data, and this is how
+**Cons**
 
-## Interpreting Scatterplots
+-   **Require Feature Scaling**: Requires normalization or standardization of features to ensure fair distance calculations.
+-   **Sensitive to Noise and Outliers**: Outliers can significantly affect predictions.
 
-1.  Is there any relationship? Is it strong?
+#### **Decision Tree**
 
-2.  If there is, is it positive or negative?
+**Pros**
 
-3.  Relationship is linear or non-linear?
+-   **Interpretable and Visualizable**: Easy to understand and explain; can visualize the tree structure.
+-   **Handles Both Numerical and Categorical Data**: Flexible in dealing with mixed data types.
+-   **No Need for Feature Scaling**: Works directly with raw data.
+-   **Captures Nonlinear Relationships**: Can model complex patterns in data.
 
-4.  Special observations?
+**Cons**
 
-5.  Is the variability of the response stable when x changes?
+-   **Prone to Overfitting**: Without pruning or limiting depth, it can memorize the training data.
+-   **Instability**: A small change in data can lead to a completely different tree structure.
+-   **Bias Towards Dominant Features**: May prioritize features with more unique levels or high variance.
 
-```{r}
+#### **Linear Regression**
 
-data <- read.csv("house_selling_prices_FL.csv")
-plot(data$price ~ data$size, pch = 20)
+**Pros**
 
-# Comments:
-# 1. There is a clear relationship.
-# 2. It is a positive association.
-# 3. It seems linear.
-# 4. Variability of price is quite stable as size changes.
+-   **Theoretical Insights**: Provides coefficients that indicate feature importance and direction of influence.
+-   **Good for Linearly Related Data**: Performs well when the relationship between features and target is linear.
 
+**Cons**
 
-```
+-   **Assumes Linearity and Symmetrical Data**: Performs poorly if the relationship between features and the target is nonlinear.
 
-### Two Categorical Scatterplots
+    ![](images/clipboard-789686564.png)
 
-```{r}
-fev <- read.csv("FEV.csv")
-female = fev$FEV[which(fev$Sex==0)]
-# Alternative: fev$FEV[fev$Sex==0]
-male = fev$FEV[which(fev$Sex==1)] 
-# Alternative: fev$FEV[fev$Sex==1]
+-   **Sensitive to Outliers**: Outliers can heavily skew the model.
 
-plot(fev$height, fev$FEV, type = "n")
-points(female ~ fev$height[which(fev$Sex==0)], 
-col = "red", pch = 20)
-points(male ~ fev$height[which(fev$Sex==1)], 
-col = "darkblue", pch = 20)
-legend(1.2, 5, legend = c("Female", "Male"), 
-col = c("red","darkblue"), pch=c(20,20))
+-   **Multicollinearity Issues**: High correlation among features can lead to unreliable coefficients.
 
-# Comments:
-# Computed correlation is quite high.
-# It is clear from the plot that there is a strong 
-# positive linear association between FEV and height. 
-# The range of FEV and height for males appears larger than for females. 
-# The variability of FEV at lower heights seems slightly 
-# less than the variability of FEV at greater heights.
+-   **Only Numerical Features**: Requires categorical features to be encoded (turned into factor), which adds preprocessing complexity.
 
-```
+#### **Logistic Regression**
 
-## Interpreting Histograms
+**Pros**
 
-1.  Range
+-   **Simple and Interpretable**: Easy to implement and interpret, especially for binary classification.
+-   **Efficient**: Works well with smaller datasets and linearly separable data.
+-   **Probability Outputs**: Provides probabilities, making it suitable for tasks requiring confidence scores.
 
-2.  Bimodal/Unimodal
+**Cons**
 
-3.  Symmetric/Skewed
+-   **Assumes Linear Decision Boundary**: Struggles with data that has nonlinear relationships unless transformed.
+-   **Sensitive to Outliers**: Outliers can distort predictions and coefficients.
+-   **Feature Engineering Required**: May need transformations or interaction terms for better performance.
+-   **Only Numerical Features**: Requires encoding (turning into factor) of categorical variables.
 
-4.  Data has Gaps/is Clustered
+#### **Naive Bayes**
 
-5.  Suspected outliers
+**Pros**
 
-```{r}
-hdb <- read.csv("hdbresale_reg.csv")
-hist(hdb$resale_price)
+-   **Simple and Interpretable**: Based on straightforward probability calculations.
+-   **Handles Missing Data**: Some variants can handle missing values effectively.
+-   **Good for Text Data**: Performs well in applications like spam filtering and sentiment analysis.
 
-# Comments:
-# range: 200k to ~1 mil
-# unimodal
-# clearly right skewed
-# suspected outliers
+**Cons**
 
-fev <- read.csv("FEV.csv")
-hist(fev$FEV)
+-   **Assumes Feature Independence**: Relies on the strong (and often unrealistic) assumption that features are independent.
+-   **Sensitive to Correlated Features**: Correlated features can degrade performance significantly.
+-   **Limited Decision Boundaries**: Cannot model complex relationships between features and the target.
+-   **Class Imbalance Issues**: May perform poorly with imbalanced datasets without proper adjustments.
 
-# Comments:
-# range: 0.5 to 6
-# unimodal
-# slightly right skewed
-# may have outliers
+**Comparison Table**
 
-```
+| **Model**               | **Pros**                                         | **Cons**                                         |
+|------------------|--------------------------|----------------------------|
+| **KNN**                 | Non-parametric, simple, models nonlinear data    | Sensitive to scaling, computationally expensive  |
+| **Decision Tree**       | Interpretable, nonlinear, handles mixed data     | Prone to overfitting, instability                |
+| **Linear Regression**   | Simple, interpretable, fast                      | Assumes linearity, sensitive to outliers         |
+| **Logistic Regression** | Efficient, interpretable, provides probabilities | Assumes linear boundary, sensitive to outliers   |
+| **Naive Bayes**         | Fast, interpretable, handles high dimensions     | Assumes feature independence, limited boundaries |
 
-### Creating Separates Histograms
+Choosing a Model
 
-```{r}
+-   Use KNN: For small datasets with nonlinear relationships.
+-   Use Decision Tree: For interpretable models with mixed data types or nonlinear patterns.
+-   Use Linear Regression: For simple regression problems with linearly related data.
+-   Use Logistic Regression: For binary classification problems with linearly separable data.
+-   Use Naive Bayes: For text classification or when feature independence is a reasonable assumption.
 
-fev <- read.csv("FEV.csv")
-female = fev$FEV[which(fev$Sex==0)]
-# Alternative: fev$FEV[fev$Sex==0]
-male = fev$FEV[which(fev$Sex==1)] 
-# Alternative: fev$FEV[fev$Sex==1]
+| Unsupervised **Algorithm** | Pros                                                     | **Cons**                                                                  |
+|------------------|------------------------|------------------------------|
+| **K-Means**                | Simple, scalable, handles numerical data well            | Sensitive to initialization, assumes spherical clusters                   |
+| **Apriori Algorithm**      | Intuitive, interpretable results, useful for rule mining | Computationally expensive, struggles with large/high-dimensional datasets |
 
-opar <- par(mfrow=c(1,2)) 
-hist(female, col = 2, freq= FALSE, 
-main = "Histogram of Female FEV", ylim = c(0,0.52))
-hist(male, col = 4, freq= FALSE, 
-main = "Histogram of Male FEV", ylim = c(0,0.52))
-# Remember to use par(mfrow=c(1,1)) to reset the diagram layout!
+# Tutorial Questions
 
-# Comments:
-# Both histogram are unimodal but have different shapes. 
-# It is almost symmetrical for females, but quite 
-# right-skewed for males.
-# Median FEV for females is much lower than males,
-# 2.49 compared to 2.605.
-# Variability for males is higher than females.
-# The respective IQR are 1.54 and 1.05.
-```
+## T1 (Introduction to R)
 
-## Interpreting Boxplots
-
-1.  How many outliers
-
-2.  Median
-
-3.  Distribution
-
-4.  Any visible pattern? (Optional)
-
-```{r}
-
-hbd <- read.csv("hdbresale_reg.csv")
-bp <- boxplot(hdb$resale_price)
-outliers <- bp$out
-head(outliers)
-
-```
-
-## Interpreting Q-Q Plot
-
-```{r}
-
-fev <- read.csv("FEV.csv")
-qqnorm(fev$FEV, pch = 20)
-qqline(fev$FEV, col = "red")
-
-# Comments:
-# Left tail sample quantiles are larger than expected,
-# hence left tail shorter than normal. 
-# Right tail sample quantiles larger than expected, hence # right tail longer than normal.
-
-# Combined with the histogram of FEV, it is clear that the
-# sample of FEV is not normally distributed and quite 
-# right skewed.
-
-```
-
-------------------------------------------------------------------------
-
-# Machine Learning Model
-
-We’ve covered 3 machine learning models that are up for grabs in the midterm: linear regression, k-nearest neighbors, and decision trees.
-
-## Linear Regression Model
-
-There are assumptions have to be fulfilled before using linear model:
-
-1.  Quantitative response (check through str() function)
-
-    Remember to `as.factor()` categorical features
-
-2.  Symmetric (check through histogram and/or qqplot)
-
-3.  Variability of y is stable when x changes (check through scatterplot)
-
-If data is found to be asymmetric, can do transformation: log(Y), sqrt(Y), 1/Y
-
-+-------------------+---------------------------+------------------------+
-| Transformation    | Restriction               | Reverse Transformation |
-+===================+===========================+========================+
-| new_Y \<- log(Y)  | Y can't be 0 nor negative | pred \<- exp(pred)     |
-+-------------------+---------------------------+------------------------+
-| new_Y \<- sqrt(Y) | Y can't be negative       | pred \<- pred\*\*2     |
-+-------------------+---------------------------+------------------------+
-| new_Y \<- 1/Y     | Y can't be 0              | pred \<- 1/pred        |
-+-------------------+---------------------------+------------------------+
-
-To evaluate goodness of fit, we consider F-test and $R^2$. When comparing models however, use adjusted $R^2$
-
-![](images/clipboard-1113485621.png)
-
-## K-Nearest Neighbor (KNN) Model
-
-There are some important steps when doing KNN:
-
-1.  Importing the required library
-    -   `library(class)`
-2.  Standardizing NUMERIC input features.
-    -   Very important, especially when they are in different magnitudes.
-    -   Use `scale()` Function
-3.  Randomly split original data to train and test set.
-    -   Usually 80% train and 20% split.
-    -   Use `shuffle()` function
-    -   Remember to `set.seed()`
-
-To evaluate goodness of fit, N-fold cross validation is usually do to. It's a fair way to evaluate most of classifier models. Confusion matrix is also used to check accuracy, precision, etc.
-
-*Bayes decision boundary* (the gold standard decision boundary) is also often used to check the goodness of fit, especially in choosing the right K.
-
--   Small K (more flexibility): When K is small, like K = 1, the KNN model is more flexible, fitting the data closely and capturing non-linear patterns. This allows it to adapt better to local variations in the data, which is important for non-linear decision boundaries. However, small KKK values can also make the model more sensitive to noise and prone to overfitting.
-
--   Large K (More Smoothing): A large K smooths out the decision boundary because the prediction is averaged over more neighbors. This can be useful for linear or simple decision boundaries, but in the case of highly non-linear boundaries, a large K would result in underfitting, where the model oversimplifies the decision boundary and fails to capture the complex patterns.
-
-![](images/clipboard-2254413627.png)
-
-## Decision Tree Model
-
-There are some important steps when doing Decision Tree:
-
-1.  importing the required library
-    -   `library(rpart)` : minsplit, maxdepth, cp
-    -   `library(rpart.plot)` : varlen, faclen
-2.  Understanding the fitted tree. It's crucial to know the how and why of the fitted tree to avoid bias
-
-To evaluate goodness of fit, N-fold cross validation can do. But most of the times confusion matrix is used.
-
-## Confusion Matrix
-
-Not a ML model, but a way to evaluate most of classifiers
-
-![](https://images.prismic.io/encord/edfa849b-03fb-43d2-aba5-1f53a8884e6f_image5.png?auto=compress,format){fig-align="center"}
-
-Some other formulas:
-
-![](https://miro.medium.com/v2/resize:fit:1400/1*gN97G0W-ochkB5z3lUtPBQ.png){fig-align="center"}
-
-------------------------------------------------------------------------
-
-# Tutorial QnA
-
-Welcome to the ***tutorial zone***—aka the place where I’ve had my biggest lightbulb moments! 💡✨ This is where the real learning happens, and I’m spilling all the tea on what I’ve solved and learned so far. Tutorials can be tough, but they’re also where everything *finally* clicks. Let’s make it fun and get things done! 😎
-
-## Tutorial 1 (Introduction to R)
-
-#### Offsite Questions
+### Offsite Questions (Functions)
 
 General idea of this problem: You have just graduated from NUS and just started your first job. You plan to buy a flat on your own which has price = \$1,200,000 (1.2 million dollars). You need to save money for several years before you can afford to make the down payment which is 25% of the flat's price.
 
@@ -329,7 +179,7 @@ General idea of this problem: You have just graduated from NUS and just started 
 
 Note: In your code for the questions below, you MUST use the names as given in bold above.
 
-1.  Write the code to calculate how many months it will take you to save up enough money for the down payment for two persons of of different salary: (i) **salary** = \$7,000; and (ii) **salary** = \$10,000.
+1.  Write the code to calculate how many months it will take you to save up enough money for the down payment for two persons of of diferent salary: (i) **salary** = \$7,000; and (ii) **salary** = \$10,000.
 
     ```{r}
     # Solution 1.i
@@ -393,72 +243,90 @@ Note: In your code for the questions below, you MUST use the names as given in b
     print(month) #43
     ```
 
-#### Onsite Questions
+### Onsite Questions (Loops & Which)
 
-1.  A sequence is generated using the following recursive relation
+1.  A sequence is generated using the following recursive relation:
 
-    $x_n$ = $2x_{n-1}$ $-$ $x_{n-2}$ $+$ $5$, $\text{ for } n \geq 3$
+$x_n = 2x_{n-1} - x_{n-2} + 5, \quad \text{for } n \geq 3,$
 
-    with $x_1$ = 0 and $x_2$ = 1.
+with $x_1 = 0$ and $x_2 = 1$.
 
-    \(a\) Use for loop in R to find the 30th term of the series.
+(a) Use a "for" loop in R to find the 30th term of the series.
 
     ```{r}
     x <- numeric(30)
     x[1] <- 0
-    x[2] <- 1
-
-    for (i in 3:30) {
-      x[i] <- 2*x[i-1] - x[i-2] + 5
-    }
-    x[30]
+    x[2] <- 1 
+    for(i in 3:30) {x[i] <- 2*x[i-1] - x[i-2] + 5}
+    x[30] # 2059
     ```
 
-    \
-
-    (b) Find the smallest value of n such that $x_n$ ≥ 1,000
+(b) Find the smallest value of (n) such that $x_n \geq 1,000$.
 
     ```{r}
+    print(which(x >= 1000))
+    # all elements from x_22 onwards are larger than 1000
+    # x_22 is the smallest, thus answer is n = 22
 
-    x <- numeric(10) 
-    x[1] <- 0
-    x[2] <- 1
-    i <- 3
-
-    while (x[i-1] <= 1000) {
-      x[i] <- 2 * x[i-1] - x[i-2] + 5
-      i <- i + 1
-    }
-
-    max(x)
-    which(x == max(x))
     ```
 
-2.  Consider another sequence which is generated using the following recursive relation
+------------------------------------------------------------------------
 
-    $y_1 = 2800 + 1.02\times y_0, \text{ with } y_0 = 1000$ and
+2.  Consider another sequence which is generated using the following recursive relation:
 
-    $y_n = 2800 + 1.02\times y_{n-1}, \text{ for } n \geq 2$
+$y_1 = 2800 + 1.02 \times y_0, \quad \text{with } y_0 = 10000$,
 
-    find the smallest value of $n$ such as $y_n$ $\geq$ $300,000$
+$y_n = 2800 + 1.02 \times y_{n-1}, \quad \text{for } n \geq 2$.
 
-    ```{r}
-    y <- numeric()  # Initialize an empty numeric vector
-    y[1] <- 2800 + 1.02 * 10000  # y_1
+Find the smallest value of $n$ such that $y_n \geq 300,000$.
 
-    n <- 2
-    while (y[n-1] < 300000) {
-      y[n] <- 2800 + 1.02 * y[n-1]
-      n <- n + 1
-    }
+```{r}
+y <- numeric()
+y <- append(y, 2800 + 1.02*10000) 
+while (max(y) < 300000) {
+  y <- c(y, 2800 + 1.02*max(y))
+}
+length(y) # 55
+y[55] # 305759.6
+```
 
-    max(y)
-    which(y == max(y))
-    ```
+## T2 (Basic Prob and Stats)
 
-## Tutorial 2 (Basic Prob and Stats)
+```{r}
+#df = read.csv(...) 
+# Imports the dataframe
+# BY DEFAULT, READ.CSV:
+# 1. Assumes values are separated by commas
+# 2. Assumes the data contains headers
 
-#### Offsite Questions
+df = read.csv(
+	"ex_1.txt",
+	sep = " ",
+	header = FALSE
+) 
+# for tab use "\t"
+```
+
+```{r}
+### Interpreting Scatterplots
+# Is there any relationship? Is it strong?
+# If there is, is it positive or negative?
+# Relationship is linear or non-linear?
+# Special observations?
+# Is the variability of the response stable when x changes? ***
+
+```
+
+```{r}
+### Interpreting Boxplots
+# How many outliers
+# Median
+# Distribution
+# Any visible pattern? (Optional)
+
+```
+
+### Offsite Questions (Box, Scatter, QQ, Hist)
 
 Forced Expiratory Volume (FEV) is an index of pulmonary function that measures the volume of air expelled after 1 second of constant effort. The dataset `FEV.csv` contains measurements for 654 children aged 3 to 19 years of age. The purpose of the data collection was to study how FEV is affected by certain other variables. The variables that we shall work with are
 
@@ -560,6 +428,8 @@ var(male) # 1.006866
 # Variability for males is higher than females.
 # The respective IQR are 1.54 and 1.05.
 
+
+
 ```
 
 \(f\) Create a scatterplot with height (in metres) on the x-axis and FEV on the y-axis.
@@ -588,13 +458,53 @@ cor(fev$FEV, fev$height) # 0.8675619
 
 ```
 
-#### Onsite Questions
+### Onsite Questions (Box)
 
-COMING SOON
+Consider a dataset about HDB resale flats in Singapore given in `hdbresale_reg.csv`, which helps to investigate the factors that affect the resale price of the flats.
 
-## Tutorial 3 (Linear Regression 1)
+1.  Import the dataset into R.
 
-#### Offsite Questions
+    ```{r}
+    hdb = read.csv("hdbresale_reg.csv")
+    names(hdb)
+
+    ```
+
+2.  How many flats are in the sample given?
+
+    ```{r}
+    dim(hdb)
+
+    # the dataframe has 6055 rows and 11 columns
+    # thus there are 6055 flats
+
+    ```
+
+3.  Exploring the variable `resale_price`:
+
+    (a) Create a histogram. Give your comments. Is the sample of resale prices normally distributed?
+
+    ```{r}
+    hist(hdb$resale_price)
+    # range: 200k to ~1 mil
+    # unimodal
+    # clearly right skewed
+    # suspected outliers
+    ```
+
+    (b) Create a box plot.
+
+    ```{r}
+    bp <- boxplot(hdb$resale_price)
+    outliers <- bp$out
+    head(outliers)
+    length(outliers) # 284 outliers
+
+    ```
+
+## T3 (Linear Regression 1)
+
+### Offsite Questions (Functions)
 
 Consider the question given in Tutorial 1.
 
@@ -633,13 +543,73 @@ F2 <- function(salary, price = 1200000, rate = 0.01, portion_save = 0.4) {
 
 ```
 
-#### Onsite Questions
+### Onsite Questions (LM Mathematics)
 
-COMING SOON
+1.  Read the data from the file Colleges.txt. Consider a simple linear regression of the percentage of applicants accepted (Acceptance) on the median combined math and verbal SAT score of students (SAT), called Model M1.
 
-## Tutorial 4 (Linear Regression 2)
+    \(a\) Write your own function in R, name the function as simple, to derive the intercept β0 and the slope β1 of Model M1. Hint: Use the formula of the estimated coefficients, β̂1 and β̂0, given in slide 31/52 of Topic 3.
 
-#### Offsite Questions
+    ```{r}
+    simple <- function(x, y) {
+    	beta1 = (sum(y*x) - sum(y)*mean(x)) /
+    (sum(x^2) - sum(x)*mean(x))
+    	beta0 = mean(y)- beta1 * mean(x)
+    	return(c(beta0, beta1))
+    }
+
+    data = read.csv("Colleges.txt", sep = "\t")
+    head(data)
+    simple(data$SAT, data$Acceptance)
+
+    ```
+
+    \(b\) Use function lm() in R to derive the coefficients of Model M1. Compare with your answer in part (a).
+
+    ```{r}
+    lm(Acceptance ~ SAT , data = data)
+    # Same coefficients from different functions
+    # Helps verify implementation of 'simple' function
+
+    ```
+
+2.  *(If time permits)*, consider a dataset about HDB resale flats in Singapore given in hdbresale_reg.csv. Consider a simple model (Model M2) where the resale price is the response and the floor area in square meters is the only regressor.
+
+    \(a\) Use the function simple you formed in the question above to find the coefficients of Model M2.
+
+    ```{r}
+    df <- read.csv("hdbresale_reg.csv")
+    names(df)
+
+    simple(x = df$floor_area_sqm, y = df$resale_price)
+    ```
+
+    \(b\) Use the function lm() in R to derive the coefficients of Model M2.
+
+    ```{r}
+    lm(df$resale_price ~ df$floor_area_sqm)
+    ```
+
+## T4 (Linear Regression 2)
+
+Linear Model Assumptions:
+
+1.  Quantitative
+
+2.  Symmetric - Histogram
+
+3.  Variability of y is stable when x changes - Scatterplot
+
+Transformations:
+
+y -\> log(y), sqrt(y), 1/y
+
+Evaluating Goodness-Of-Fit:
+
+-   F-Test (p-value)
+
+-   R-squared
+
+### Offsite Questions (Hist, Linear Regression)
 
 Consider data set given in the file `hdbresale_reg.csv` on Canvas, which has the information of 6055 HDB resale flats in Singapore. We would want to form a linear model that helps to predict the resale price of HDB flats, based on the floor area in square meters and the type of the flats.
 
@@ -707,7 +677,7 @@ summary(M)
 
 ```
 
-\(e\) Report the coefficient of the floor area in square meters and interpret it.
+\(e\) Report the coeficient of the floor area in square meters and interpret it.
 
 ```{r}
 # The coefficient of it is 0.003712. 
@@ -719,7 +689,7 @@ summary(M)
 
 ```
 
-\(f\) Predict the resale price of a 4-room HDB flat that is of 100 square meters.
+\(f\) Predict the resale price of a 4-room HDB at that is of 100 square meters.
 
 ```{r}
 new = data.frame(
@@ -742,77 +712,87 @@ summary(M)$r.squared
 
 ```
 
-#### Onsite Questions
+### Onsite Questions (Linear Regression)
 
-A dataset on house selling price was randomly collected, `house_selling_prices_FL.csv`. It’s our interest to model how $y$ = selling price (dollar) is dependent on $x$ = the size of the house (square feet). A simple linear regression model ($y$ regress on $x$) was fitted, called Model 1.
+1.  A dataset on house selling price was randomly collected (`house_selling_prices_FL.csv`). It’s our interest to model how y = selling price (dollar) is dependent on x = the size of the house (square feet). A simple linear regression model (y regress on x) was fitted, called Model 1.
 
-The given data has another variable, NW, which specifies if a house is in the part of the town considered\
-less desirable (NW = 0).
+The given data has another variable, NW, which specifies if a house is in the part of the town considered less desirable (NW=0).
+
+\(a\) Derive the correlation between x and y.
 
 ```{r}
-house <- read.csv("house_selling_prices_FL.csv")
-dim(house)
-house$NW <- as.factor(house$NW)
-str(house)
+data <- read.csv("house_selling_prices_FL.csv")
+str(data)
+cor(data$price, data$size)
+# Correlation between
+# 'price' and 'size' is 0.761
 ```
 
-\(a\) Derive the correlation between $x$ and $y$.
+\(b\) Derive a scatter plot of y against x. Give your comments on the association of y and x.
 
 ```{r}
-cor(house$size, house$price)
+plot(data$price ~ data$size, pch = 20)
+plot(data$size, data$price, pch = 20)
+
+# 1. There is a clear relationship.
+# 2. It is a positive association.
+# 3. It seems linear.
+# 4. Variability of price is quite stable as size changes.
+
 ```
 
-\(b\) Derive a scatter plot of $y$ against $x$. Give your comments on the association of y and x.
+\(c\) Derive $R^2$ of Model 1. Verify that $\sqrt{R^2} = |cor(y, x)|$. In which situation can we have $\sqrt{R^2} = cor(y, x)$?
 
 ```{r}
-plot(house$price ~ house$size, pch = 20)
+M1 <- lm(price ~ size, data = data)
+r.squared <- summary(M1)$r.squared
+print(r.squared) # 0.57952
+print(sqrt(r.squared)) # 0.7612621
+# Same as correlation value derived from 1.a.
 
-# Comments:
-# There is a clear (obvious) association shown.
-# The association is positive.
-# The association is quite linear.
-# The variability of y (the price) is quite stable when x (the size) changes.
-```
+# Given that we have verified that 
+# sqrt(R^2) = abs(cor(y, x)),
+# sqrt(R^2) = cor(y, x) when 
+# abs(cor(y, x)) = cor(y, x).
+# Thus, when cor(y, x) > 0,
+# then in a simple model y ∼ x, 
+# we always have sqrt(R^2) = cor(y, x).
 
-\(c\) Derive $R^2$ of Model 1. Verify that $\sqrt{R^2}$ = $|cor(y, x)|$. In which situation we can have $\sqrt{R^2}$ = $cor(y, x)$?
-
-```{r}
-M1 = lm(price ~ size, data = house)
-summary(M1)$r.squared
-sqrt(summary(M1)$r.squared ) # same as cor(price, size) # 0.7612621
-
-# From the code above, we can see that 
-# √R^2 = |cor(y, x)|: R^2 = 0.5795, hence, √0.5795 = 0.761 = |cor(y, x)|.
-# When cor(y, x) > 0 then in a simple model y ∼ x, we always have √R2 = cor(y, x)
 ```
 
 \(d\) Form a model (called Model 2) which has two regressors (x and NW). Report the coefficient of variable NW in Model 2. Interpret it.
 
 ```{r}
-M2 = lm(price ~ size + NW, data = house)
+str(data)
+data$NW = as.factor(data$NW)
+str(data)
+
+M2 = lm(price ~ size + NW, data = data)
 summary(M2)
 
-# The fitted equation of Model 2:
-# y_pred = −15257.5 + 77.99x + 30569.1 × I(NW = 1).
+# Fitted equation of linear model:
+# fitted_price = -15257.514 + 77.985 * size + 
+# 					30569.087 * I(NW = 1)
+# The estimated coefficient of NW in Model 2 is 30569.1 
+# This means that for houses of same size, those with 
+# NW = 1 (Those located at NorthWest area) has predicted 
+# price higher than that in the area of NW = 0 by $30569.1
 
-# The estimated coefficient of NW in Model 2 is 30569.1
-# This value means: for two houses of the same size (fix x), 
-# the house in the more desirable part (NW = 1) is 
-# $30569.1 more than the one in the less desirable part (NW = 0)
 ```
 
-\(e\) Estimate and report the price of a house where its size is 4000 square feet and is located at the more\
-desirable part of the town.
+\(e\) Estimate and report the price of a house where its size is 4000 square feet and is located at the more desirable part of the town.
 
 ```{r}
-predict(M2, newdata=data.frame(size=4000, NW = "1"))
+new_data <- data.frame(size = 4000, NW = "1")
+predict(M2, newdata = new_data)
 
-# The mean price of a house with size x = 4000 and NW = 1 is $327252.1.
+# The predicted price of a house with size x = 4000 and 
+# NW = 1 is $327252.1.
 ```
 
-## Tutorial 5 (Linreg & KNN)
+## T5 (K-Nearest Neighbor)
 
-#### Offsite Questions
+### Offsite Questions (Multiple Scater, Linear Regression)
 
 1.  (MLR) Consider the horseshoe female crab data given in the csv file `crab.csv`. We would want to form a model for the weight of the female crabs (kg), which depends on its width (cm) and its spine condition (1 = both good, 2 = one worn or broken, 3 = both worn or broken).
 
@@ -836,11 +816,7 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
     points(weight[spine == "1"] ~ width[spine =="1"], pch = 15, col = "red")
     points(weight[spine == "2"] ~ width[spine =="2"], pch = 16, col = "blue")
     points(weight[spine == "3"] ~ width[spine =="3"], pch = 17, col = "green")
-    legend(22,5,
-           legend=c("Spine = 1", "Spine = 2", "Spine = 3"),
-           col=c("red", "blue", "green"), 
-           pch=c(15,16,17)
-           )
+    legend(22,4,legend=c("1", "2", "3"),col=c("red", "blue", "green"), pch=c(15,16,17))
     ```
 
     \(b\) Fit a linear regression model for weight which has two explanatories, width and spine.
@@ -850,7 +826,7 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
     summary(model)
     ```
 
-    \(c\) Is the fitted model significant?
+    \(c\) Is the fitted model signicant?
 
     ```{r}
     # the model f statistic showing p value is less than 2.2 x 10^-16.
@@ -870,21 +846,18 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
 
     ```{r}
     summary(model)
-    # weight = -3.92955 + 0.24376*width + 0.05544*I(spine=2) - 0.06969*I(spine=3)
+    # weight = -3.92955 + 0.24376*width + 0.05544*I(spine=2) -0.06969*I(spine=3)
     ```
 
-    \(f\) Two female crabs of the same width, and the difference of their weight if one has spines are of good condition and another one with broken spines.
+    \(f\) Two female crabs of the same width, and the diference of their weight if one has spines are of good condition and another one with broken spines.
 
     ```{r}
-    # weight = -3.92955 + 0.24376*width + 0.05544*I(spine=2) - 0.06969*I(spine=3)
-    # weight1 = -3.92955 + 0.24376*width + 0.05544*0 - 0.06969*0
-    # weight2 = -3.92955 + 0.24376*width + 0.05544*0 - 0.06969*1
+    # weight = -3.92955 + 0.24376*width + 0.05544*I(spine=2) + -0.06969*I(spine=3)
+    # weight1 = -3.92955 + 0.24376*width + 0.05544*0 + -0.06969*0
+    # weight2 = -3.92955 + 0.24376*width + 0.05544*0 + -0.06969*1
 
-    weight.dif <- (0.05544*0 - 0.06969*0) - (0.05544*0 - 0.06969*1)
+    weight.dif <- (0.05544*0 + -0.06969*0) - (0.05544*0 + -0.06969*1)
     weight.dif
-
-    # When they have the same width, then on average the one that has spines
-    # of good condition is heavier than the one with broken spines by 0.06969 kg.
     ```
 
     \(g\) Predict the weight of a female crab that has width of 27 cm and has both spines worn or broken.
@@ -898,11 +871,7 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
 
     Suppose we have developed a K-nearest neighbors classier for predicting diabetes status. The following table shows the actual response $Y$ (1 = yes, 0 =n o) and fitted value $\hat Y$ using the classier for 10 test data points. A test data point is predicted to be $\hat G$= 1 if $\hat Y$ \> δ, for a specied threshold value δ (Recall that we use δ = 0.5 in class, also known as the majority rule).
 
-    ![](images/clipboard-794303694.png){width="254"}
-
     (a) We define: $TPR = \frac {TP}{TP +FN}$, $FPR = \frac {FP}{FP +TN}$; For each of the thresholds δ = 0.3, 0.6 and 0.8, derive $TPR$ and $FPR$ in making predictions with the K-nearest neighbors classier for the 10 test data points. Plot $TPR$ against $FPR$ for the three thresholds.
-
-        ![](images/clipboard-2786262008.png){width="364"}
 
     ```{r}
     y <- c(1,1,0,1,1,0,0,1,0,0)
@@ -910,9 +879,9 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
     tpr.all <- numeric(0)
     fpr.all <- numeric(0)
 
-    delta.list <- c(0.3,0.6,0.8)
-    for (delta in delta.list) {
-      pred <- ifelse(ycap >= delta, 1 ,0)
+    sigma.list <- c(0.3,0.6,0.8)
+    for (sigma in sigma.list) {
+      pred <- ifelse(ycap >= sigma, 1 ,0)
       confusion.matrix <- table(y, pred)
       tpr <- confusion.matrix[2,2]/sum(confusion.matrix[2,])
       fpr <- confusion.matrix[1,2]/sum(confusion.matrix[1,])
@@ -920,7 +889,7 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
       fpr.all <- append(fpr.all, fpr)
     }
 
-    plot(tpr.all ~ fpr.all, type = "n", pch = 20,
+    plot(tpr.all ~ fpr.all, pch = 20,
          xlim = c(0,1),
          ylim = c(0,1))
     points(tpr.all[1] ~ fpr.all[1], pch = 15, col = "red")
@@ -941,10 +910,10 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
     # these two points can be added to the plot.
     ```
 
-3.  The CSV file `Caravan.csv` contains data on 5822 real customer records on caravan insurance purchase. This data set is owned and supplied by the Dutch data mining company, Sentient Machine Research, and is based on real world business data. Each record consists of 86 variables, containing socio-demographic data (variables 1-43) and product ownership (variables 44-86). Variable 86 (`Purchase`) indicates whether the customer purchased a caravan insurance policy. For this business, assume that the overall error rate (equivalently, the accuracy) is not of interest. Instead, the company wants to use the classier to predict who are the potential customers likely to purchase insurance. Then the metric precision will be important, since it relates the proportion of Individuals who will actually purchase the insurance, among the group of individuals who are predicted to purchase insurance.
+3.  The CSV file `Caravan.csv` contains data on 5822 real customer records on caravan insurance purchase. This data set is owned and supplied by the Dutch data mining company, Sentient Machine Research, and is based on real world business data. Each record consists of 86 variables, containing sociodemographic data (variables 1-43) and product ownership (variables 44-86). Variable 86 (`Purchase`) indicates whether the customer purchased a caravan insurance policy. For this business, assume that the overall error rate (equivalently, the accuracy) is not of interest. Instead, the company wants to use the classier to predict who are the potential customers likely to purchase insurance. Then the metric precision will be important, since it relates the proportion of Individuals who will actually purchase the insurance, among the group of individuals who are predicted to purchase insurance.
 
     ```{r}
-    cara <- read.csv("Caravan data.csv")
+    cara <- read.csv("Caravan.csv")
     head(cara, n = 2)
     str(cara)
     dim(cara)
@@ -970,9 +939,9 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
     \(c\) Randomly select 1000 observations to form the test data, and the remaining observations will be the training data.
 
     ```{r}
-    set.seed(99)
+    set.seed(5)
     n <- dim(cara)[1] #train data number
-    shuffled.index <- sample(c(1:n), size = 2000)
+    shuffled.index <- sample(c(1:n), size = 1000)
     X.train <- scaled.X[-shuffled.index,]
     X.test<- scaled.X[shuffled.index,]
     Y.train <- as.factor(cara$Purchase[-shuffled.index])
@@ -1013,13 +982,92 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
     # With that, the value of k that gives largest average precision is chosen.
     ```
 
-#### Onsite Questions
+### Onsite Questions (KNN Mathematics)
 
-COMING SOON
+1.  The k-nearest neighbor classifier
 
-## Tutorial 6 (KNN & Decision Tree)
+The table below provides a training data set containing six observations, three predictors, and one qualitative response variable, y.
 
-#### Offsite Questions
+| Obs | $X_1$ | $X_2$ | $X_3$ | Y     |
+|-----|-------|-------|-------|-------|
+| 1   | 0     | 3     | 0     | Red   |
+| 2   | 2     | 0     | 0     | Red   |
+| 3   | 0     | 1     | 3     | Red   |
+| 4   | 0     | 1     | 2     | Green |
+| 5   | -1    | 0     | 1     | Green |
+| 6   | 1     | 1     | 1     | Red   |
+
+Suppose we wish to use this data set to make a prediction for a new observation with response Y given that it has $X_1 = X_2 = X_3 = 0$ using K-nearest neighbors.
+
+\(a\) Compute the Euclidean distance between each observation and the test point, $X_1 = X_2 = X_3 = 0$
+
+```{r}
+X1 <- c(0, 2, 0, 0, -1, 1)
+X2 <- c(3, 0, 1, 1, 0, 1)
+X3 <- c(0, 0, 3, 2, 1, 1)
+Y <- c("Red", "Red", "Red", "Green", "Green", "Red")
+dataframe <- data.frame(X1, X2, X3, Y)
+
+dataframe$distance <- 
+    sqrt(
+        dataframe$X1^2 + 
+        dataframe$X2^2 + 
+        dataframe$X3^2
+    )
+
+dataframe <- dataframe[order(dataframe$distance),]
+```
+
+\(b\) What is our prediction with K=1? Why?
+
+```{r}
+# Prediction for K = 1 is 
+# Green as the one nearest 
+# point is also Green. Thus,
+# by majority vote, KNN 
+# classifies the new data
+# point as Green.
+```
+
+\
+(c) What is our prediction with K=3? Why?
+
+```{r}
+# Prediction for K = 3 is 
+# Red as 2/3 of the nearest
+# points are Red, with one 
+# Green point. Thus,
+# by majority vote, KNN 
+# classifies the new data
+# point as Red.
+
+```
+
+\
+(d) If the Bayes decision boundary (the gold standard decision boundary) in this problem is highly non-linear, then would we expect the best value for KKK to be large or small? Why?
+
+```{r}
+# We would expect the best
+# value of K to be small, 
+# since it translates to 
+# a more flexible 
+# classification method.
+
+```
+
+## T6 (Decision Trees)
+
+```{r}
+# fit <- rpart(...)
+
+# Predict using decision trees
+#predict(fit, newdata, type = "class") # Classification
+#predict(fit, newdata, type = "prob") # Raw probability
+# **No need to remove features
+
+```
+
+### Offsite Questions (KNN Tuning, N-fold CV, Decision Trees)
 
 1.  *(KNN and N -fold Cross Validation)*
 
@@ -1028,7 +1076,7 @@ COMING SOON
     \(a\) Read and explore the data from the file `German_credit.csv`.
 
     ```{r}
-    data <- read.csv("German credit.csv")
+    data <- read.csv("German_credit.csv")
     head(data)
     str(data)
     ```
@@ -1072,7 +1120,7 @@ COMING SOON
     library(class)
     set.seed(100)
 
-    data <- read.csv("German credit.csv")
+    data <- read.csv("German_credit.csv")
     X <- scale(data[-1])
     Y <- data$Creditability
 
@@ -1106,7 +1154,7 @@ COMING SOON
     library(class)
     set.seed(100)
 
-    data <- read.csv("German credit.csv")
+    data <- read.csv("German_credit.csv")
     X <- scale(data[-1])
     Y <- data$Creditability
 
@@ -1151,12 +1199,10 @@ COMING SOON
 
     Consider the famous Iris Flower Data set which was rst introduced in 1936 by the famous statistician Ronald Fisher. This data set consists of 50 observations from each of three species of Iris (Iris setosa, Iris virginica and Iris versicolor). Four features were measured from each observation: the length and the width of the sepals and petals (in cm).
 
-    ![](images/clipboard-1563154089.png)
-
     \(a\) Use decision tree method to predict Iris species based on all four features.
 
     ```{r}
-    iris <- read.csv("Iris dataset.csv")
+    iris <- read.csv("iris.csv")
     head(iris)
     str(iris)
     dim(iris)
@@ -1193,271 +1239,1514 @@ COMING SOON
     # the petal length and petal width are more important.
     ```
 
-    ```{r}
-    pred <- predict(fit, newdata = iris[-5], type = "class")
-    confussion_matrix <- table(iris[,5], pred)
-    accuracy <- sum(diag(confussion_matrix))/sum(confussion_matrix)
-    accuracy
-    ```
+## T7 (Decision Trees 2)
 
-    ```{r}
-    newdata <- data.frame(
-      sepal.length <- 5,
-      sepal.width <- 2.9,
-      petal.length <- 7,
-      petal.width <- 0.3
-    )
+### Offsite Questions (Decision Trees, N-fold CV)
 
-    pred <- predict(fit, newdata = newdata, type = "prob")
-    pred
-    ```
+(DT and N-fold Cross Validation)
 
-# Past Year Papers
+Consider the famous Iris Flower Data set which was first introduced in 1936 by the famous statistician Ronald Fisher. This data set consists of 50 observations from each of three species of Iris (Iris setosa, Iris virginica, and Iris versicolor).
 
-## Y(22/23) S2
+Four features were measured from each observation: the length and the width of the sepals and petals (in cm).
 
-### Questions 1 *(50 points)*
+![](images/clipboard-2361412568.png)
 
-A study of nesting horseshoe crabs (J. Rrockmann, Ethology, 102: 1-21, 1996) collected data on 173 female horseshoe crabs. Explanatory variables included the female crab's `color` (2,3,4 and 5 which increases when the darkness increases), spine condition, `weight` (kg), and carapace `width` (cm).
+In Tutorial 6, we used the decision tree method to predict Iris species based on all four features. We now would want to use N-fold CV to check on how good the method is, based on the accuracy.
 
-Variable `satell` indicates the number of male crab (called satellite) attached to the female crabs (for example, the first crab has 8 satellites attached to it). In this problem, we are interested in the possible factors like `color`, `weight` and `width` that may affect the number of satellites attach to a female crab.
+We’ll use 5-fold CV where we would want to keep the ratio of the three species the same (1:1:1) in both the training set and test set.
 
-Data are given in the file `data1.txt`.
-
-Import the given data into **R** and keep all the variable names as original.
+What’s the average accuracy of the decision tree method?
 
 ```{r}
-data<-read.table('data1.txt', header=T) 
-head(data)
-dim(data)
-names(data)
-attach(data)
+df <- read.csv("iris.csv")
+str(df)
+table(df$class)
 ```
 
-**Part I**: Exploring the response variable - `satell`
+```{r}
+set.seed(1101)
+n_folds <- 5
+folds_indexes_1 <- sample(rep(1:n_folds, length.out = 50))
+print(table(folds_indexes_1))
+folds_indexes_2 <- sample(rep(1:n_folds, length.out = 50))
+print(table(folds_indexes_2))
+folds_indexes_3 <- sample(rep(1:n_folds, length.out = 50))
+print(table(folds_indexes_3))
+```
 
-1.  Create a histogram of this variable with a normal density curve overlaying. Give your comment about this plot.
+```{r}
+folds_indexes = c(folds_indexes_1, folds_indexes_2, folds_indexes_3)
+print(table(folds_indexes))
+print(folds_indexes)
+
+accuracy <- numeric(n_folds)
+for (i in 1:n_folds) {
+  test_indexes <- which(i == folds_indexes)
+  fit <- rpart(class ~ ., method = "class",
+               data <- df[-test_indexes,])
+  prediction = predict(fit, df[test_indexes,],
+                       type = "class")
+  accuracy[i] <- mean(prediction == df$class[test_indexes])
+}
+
+print(accuracy)
+print(mean(accuracy))
+# The average accuracy of the decision tree method is 0.94
+```
+
+### Onsite Questions (Decision Trees Tuning, N-fold CV)
+
+(Decision Trees)
+
+Customer churn is the loss of clients or customers. Banks, telephone service companies, Internet service providers, pay TV companies, and insurance firms often use customer churn analysis and customer churn rates as one of their key business metrics.
+
+This is because the cost of retaining an existing customer is far less than acquiring a new one. Companies from these sectors often have customer service branches which attempt to win back defecting clients, because recovered long-term customers can be worth much more to a company than newly recruited clients.
+
+In this problem, a wireless telecommunications company wants to predict whether a customer will churn (switch to a different company) in the next six months. With a reasonably accurate prediction of a person's churning, the sales and marketing groups can attempt to retain the customer by offering various incentives. Variables of our concern are listed below.
+
+\(i\) Age (years)
+
+\(ii\) Married (true/false)
+
+\(iii\) Duration as a customer (years)
+
+\(iv\) Churned contacts - Number of the customer's contacts that have churned (count)
+
+\(v\) Churned (true/false) — Whether the customer churned
+
+\(a\) Build a decision tree for predicting customer churn, using the feature variables Age, Married, Cust_years, and Churned_contacts.
+
+```{r}
+set.seed(100)
+df <- read.csv("churn.csv")
+str(df)
+df$Churned <- as.factor(df$Churned)
+df$Married <- as.factor(df$Married)
+
+
+library(rpart)
+fit <- rpart(Churned ~ Age + Married + Cust_years + Churned_contacts, 
+             data = df,
+             method = "class",
+             parms = list(split = 'information'),
+             control = rpart.control(minsplit = 1))
+
+library(rpart.plot)
+rpart.plot(fit, type=4, extra=2)
+
+
+```
+
+\(b\) Consider the decision tree in part (a) to predict binary variable Churned. Use the tree to predict customer churn for the following observations.
+
+![](images/clipboard-683929762.png)
+
+```{r}
+index <- c(2821, 96, 5085, 758, 487, 987, 6061, 3745, 4709, 2769)
+df[index,]
+
+
+pred <- predict(fit, newdata = df[index,], type = "class")
+pred
+confusion_matrix <- table(actual = df$Churned[index], predicted = pred)
+confusion_matrix
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+accuracy
+```
+
+Recall that we studied N-fold cross-validation for the K-nearest neighbor classifier, in which the value of k is varied to control the complexity of the decision surface for the classifier.
+
+For decision tree classification, when fitting a tree using function `rpart()`, we use the argument `control = rpart.control(minsplit = 1)` where `minsplit = 1` is to specify the minimum number of observations that must exist in a node in order for a split to be attempted. By default, `minsplit = 20`. This `minsplit` argument helps to draft the complexity of a tree, complex with many layers and branches or simple with few layers and less branches.
+
+For this control = `rpart.control()`, there is a similar complexity parameter exists, which is denoted as `cp` where by default `cp = 0.01`:
+
+```         
+control = rpart.control(cp = 0.01)
+```
+
+Heuristically, smaller values of `cp` correspond to decision trees of larger sizes, and hence more complex decision surfaces.
+
+For this problem, we will investigate n-fold cross-validation for a decision tree classifier.
+
+Consider the data set "bank-sample.csv" we discussed in the lectures. For this exercise, we will fit a decision tree with `subscribed` as outcome; and `job`, `marital`, `education`, `default`, `housing`, `loan`, `contact`, and `poutcome` as 8 feature variables. **We want to find the best cp value in terms of mis-classification error rate.**
+
+1.  Randomly split the entire data set into 10 mutually exclusive data sets.
+
+2.  Let cp take on the values $10^k$ for k=−5,−4,...,0,...,3,4,5.
+
+3.  At each cp value, run the following loop for j=1,2,...,10.
+
+    -   i\. Set the jth group to be the test set.
+
+    -   ii\. Fit a decision tree on the other 9 sets with the value of cp.
+
+    -   iii\. Predict the class assignment of `subscribed` for each observation of the test set.
+
+    -   iv\. Calculate the number of mis-classification(s) by comparing predicted versus actual class labels in the test set.
+
+4.  Determine the best cp value in terms of mis-classification error rate.
+
+**Note:** mis-classification error rate is the complement of the accuracy.
+
+```{r}
+df <- read.csv("bank-sample.csv")
+str(df)
+col_names <- c("subscribed", "job", "marital", "education", "default", "housing", "loan", "contact", "poutcome")
+df_new <- df[,col_names]
+str(df_new)
+```
+
+```{r}
+set.seed(100)
+cp_values <- 10^(-5:5)
+print(cp_values)
+```
+
+```{r}
+library(rpart)
+library(rpart.plot)
+index <- 1
+cp_err <- numeric(11)
+n_folds <- 10
+folds_indexes <- sample(rep(1:n_folds, length.out = dim(df_new)[1])) #nrow(df_new) the same 
+for (cp_val in cp_values) {
+  err <- numeric(10)
+  for (j in 1:10) {
+    test_indexes <- which(folds_indexes == j)
+    fit <- rpart(subscribed ~ .,
+                 method = "class",
+                 data = df_new[-test_indexes,],
+                 control = rpart.control(cp = cp_val))
+    prediction <- predict(fit,
+                          df_new[test_indexes,],
+                          type = "class")
+    err[j] <- mean(prediction != df_new$subscribed[test_indexes])
+  }
+  cp_err[index] <- mean(err)
+  index <- index + 1
+}
+```
+
+```{r}
+plot(log(cp_values, base = 10), cp_err, type = 'b')
+best.cp <- cp_values[which(cp_err == min(cp_err))]
+print(best.cp)
+
+# From the plot, we can observe that cp = 0.01 gives the lowest misclassification error rate.
+```
+
+```{r}
+fit <- rpart(subscribed ~ ., 
+             method = "class", 
+             data = df_new, 
+             control = rpart.control(cp = 0.01))
+rpart.plot(fit, type = 4, extra = 2, clip.right.labs = FALSE, varlen = 0, faclen = 0)
+
+```
+
+## T8 (Naive Bayes)
+
+### Offsite Questions (Naive Bayes, Decision Trees, ROC, AUC)
+
+Consider the data set "Titanic.csv" again.
+
+\(a\) Fit a decision tree on all the three feature variables, called M2, which uses `minsplit = 1` and information gain.
+
+\(b\) Plot the tree M2.
+
+\(c\) Plot the ROC curves and derive the AUC values for the two classifiers (naive Bayes from on-site question and decision tree). Which classifier has a larger AUC value?
+
+```{r}
+df <- read.csv("Titanic.csv")
+str(df)
+
+library(rpart)
+library(rpart.plot)
+library(e1071)
+library(ROCR)
+
+set.seed(100)
+M1 <- naiveBayes(Survived ~ Class + Sex + Age, df)
+M2 <- rpart(Survived ~ Class + Sex + Age, 
+            data = df,
+            method = "class",
+            control = rpart.control(minsplit = 1),
+            parms = list(split = 'information'))
+rpart.plot(M2, type = 4, extra = 2, clip.right.labs = FALSE, varlen = 0, faclen = 0)
+
+# Plot the ROC curves and derive the AUC values for the two classifiers (naive Bayes from on-site question and decision tree). Which classifier has a larger AUC value?
+
+pred.M1 <- predict(M1, df, type = 'raw')
+score <- pred.M1[,2]
+survived_numeric <- ifelse(df$Survived == "Yes", 1, 0)
+pred_nb <- prediction(score, survived_numeric)
+roc_nb <- performance(pred_nb, measure = "tpr", x.measure = "fpr")
+plot(roc_nb, col = "red")
+
+pred.M2 <- predict(M2, df, type = 'prob')
+score2 <- pred.M2[,2]
+pred_dt <- prediction(score2, survived_numeric)
+roc_dt <- performance(pred_dt, measure = "tpr", x.measure = "fpr")
+plot(roc_dt, col = "blue")
+
+plot(roc_nb, col = "red", lwd = 2, main = "ROC Curves: Naive Bayes vs Decision Tree")
+# Add ROC curve for Decision Tree
+plot(roc_dt, col = "blue", lwd = 2, add = TRUE)
+legend(x = "bottomright", 
+       legend = c("Naive Bayes", "Decision Tree"), 
+       col = c("red", "blue"), 
+       lwd = 2,
+       lty = 1)
+
+auc_nb <- performance(pred_nb, measure = "auc")
+auc_nb_value <- as.numeric(auc_nb@y.values) # Extract the AUC value
+print(auc_nb_value)
+# 0.7164944
+
+
+auc_dt <- performance(pred_dt, measure = "auc")
+auc_dt_value <- as.numeric(auc_dt@y.values) # Extract the AUC value
+print(auc_dt_value)
+# 0.7262628
+
+# From AUC values, the decision tree classifier is
+# slightly better than the Naive Bayes classifier
+
+```
+
+### Onsite Questions (Naive Bayes Mathematics)
+
+Data set "Titanic.csv" provides information on the fate of passengers on the fatal maiden voyage of the ocean liner Titanic. It includes the variables: economic status (class), sex, age, and survival. We will train a naive Bayes classifier using this data set, and predict survival.
+
+1.  Compute the probabilities $P(Y=1)$ (survived) and $P(Y=0)$ (did not survive).
+
+2.  Compute the conditional probabilities $P(X_i = x_i | Y = 1)$ and $P(X_i = x_i | Y = 0)$, where i=1,2,3,4 for the feature variables X={class,sex,age}
+
+3.  Predict survival for an adult female passenger in 2nd class cabin.
+
+4.  Compare your prediction in (c) with the one performed by the `naiveBayes()` function in package `e1071`
+
+```{r}
+df <- read.csv("Titanic.csv")
+str(df)
+prop.table(table(df$Survived))
+```
+
+```{r}
+tab <- table(df[,c("Survived", "Class")])
+print(tab)
+class.pro <- prop.table(tab, margin = 1)
+print(class.pro)
+
+# P (Class = 1st | Y = 1) = 0.286
+# P (Class = 2nd | Y = 1) = 0.166
+# P (Class = 3rd | Y = 1) = 0.250
+# P (Class = Crew | Y = 1) = 0.298
+
+# P (Class = 1st | Y = 0) = 0.0819
+# P (Class = 2nd | Y = 0) = 0.112
+# P (Class = 3rd | Y = 0) = 0.354
+# P (Class = Crew | Y = 0) = 0.452
+
+
+```
+
+```{r}
+tab <- table(df[,c("Survived", "Sex")])
+print(tab)
+sex.pro <- prop.table(tab, margin = 1)
+print(sex.pro)
+
+# P (Class = Female | Y = 1) = 0.484
+# P (Class = Male | Y = 1) = 0.516
+
+# P (Class = Female | Y = 0) = 0.085
+# P (Class = Male | Y = 0) = 0.915
+
+```
+
+```{r}
+tab <- table(df[,c("Survived", "Age")])
+print(tab)
+age.pro <- prop.table(tab, margin = 1)
+print(age.pro)
+
+# P (Class = Adult | Y = 1) = 0.920
+# P (Class = Child | Y = 1) = 0.080
+
+# P (Class = Adult | Y = 0) = 0.965
+# P (Class = Child | Y = 0) = 0.035
+```
+
+```{r}
+# Predict survival for an adult female passenger in 2nd class cabin.
+# P(Y = 1) *.                   # Survival 
+# P(Class = 2nd|Y = 1) *        # 2nd Class
+# P(Sex = Female|Y = 1) *.      # Female
+# P(Age = Adult|Y = 1)          # Adult
+# = 0.323035 * 0.16596343 * 0.48382560 * 0.91983122
+# = 0.02385937
+
+# P(Y = 0) *                    # Survival 
+# P(Class = 2nd|Y = 0) *        # 2nd Class
+# P(Sex = Female|Y = 0) *       # Female
+# P(Age = Adult|Y = 0)          # Adult
+# = 0.676965 * 0.11208054 * 0.08456376 * 0.96510067
+# = 0.006192319
+
+# Thus, the ratio between probability of survived 
+# and not survived is 0.02385937/0.006192319 (3.85)
+# which is nearly 4 times. 
+
+# We predict that an adult female passenger in 2nd class
+# cabin will survive.
+```
+
+```{r}
+# 4. Compare your prediction in (c) with naiveBayes() function
+library(e1071)
+M1 <- naiveBayes(Survived ~ Class + Sex + Age, df)
+newdata <- data.frame(Class = "2nd", Sex = "Female", Age = "Adult")
+
+pred.label <- predict(M1, newdata)
+print(pred.label)
+
+pred.prob <- predict(M1, newdata, "raw")
+print(pred.prob)
+
+print(pred.prob[1,"Yes"] / pred.prob[1,"No"])
+
+# Ratio is same as calculated.
+
+```
+
+## T9 (Logistic Regression)
+
+```{r}
+# M1 = glm(y ~ x1 + x2 + ..., data = ..., family = binomial)
+
+# predict(M1, newdata = ..., type = "response")
+#    Get probability
+# predict(M1, newdata = ..., type = "link")
+#    Get Log-odds (Rarely used)
+
+# Coefficient of numerical features:
+# If other regressors are fixed, when X increases by one
+# unit, the LOG-odds of Y increases/decreases by C units.
+# Thus, odds of Y will be e^C = ... TIMES larger/smaller.
+```
+
+### Offsite Questions (Logistic Regression, ROC, AUC)
+
+Consider data set `Titanic.csv` again which was mentioned in Tutorial 8.
+
+1.  Perform logistic regression using all the feature variables to predict the survival status, called model M2.
 
     ```{r}
+    df <- read.csv("Titanic.csv")
+    str(df)
+    df$survived_numeric <- ifelse(df$Survived == "No", 0, 1)
 
-    hist(satell, probability = TRUE, 
-         main = "Histogram of Satell with Normal Density Curve",
-         xlab = "Number of Satellites", col = "lightblue", border = "black")
+    M2 <- glm(survived_numeric ~ Class + Sex + Age, data = df, family = binomial)
+    summary(M2)
+    ```
 
-    x_values <- seq(min(satell), max(satell), length = 100)
-    y_values <- dnorm(x_values, mean = mean(satell), sd = sd(satell))
-    lines(x_values, y_values, col = "red", lwd = 2)
+2.  Write down the fitted equation of model M2.
 
-    # Comments:
-    # The histogram of the satell variable shows values ranging from 0 to 15, 
-    # with a single peak (unimodal) where most of the data is concentrated around 1. 
-    # The distribution is clearly right-skewed, no gap.
-    # There are a few suspected outliers on the far right, with values around 15.
+    ```{r}
+    # p_hat = predicted probability of survival
+    # log(p_hat/(1-p_hat)) = 2.0438 - 1.0181 * I(Class=2nd) - 1.7778 * I(Class = 3rd) 
+    # - 0.8577 * I(Class = Crew) - 2.4201 * I(Sex = Male) + 1.0615 * I(Age = Child)
+    ```
+
+3.  Interpret the coefficient of the variable ‘Sex’ in M2.
+
+    ```{r}
+    # Female is the reference, Male is indicated by indicator.
+    # Meaning, given the same condition on class and age, when 
+    # comparing to a female, the LOG-odds of survival for a 
+    # male is less than that of a female by 2.4201.
+    # Thus, odds of survival of a male passenger will be less
+    # than that of a female by e^2.4201 = 11.25 TIMES
 
     ```
 
-2.  Create a box plot of this variable. Does it show any outliers? If yes, retrieve the full information (full row) of the crabs that are outliers in number of satellites. Copy the information and paste into R code file as comments.
+4.  Interpret the coefficient of the variable ‘Age’ in M2.
 
     ```{r}
-    boxplot(satell)
-    out <- boxplot(satell)$out; out
-    index <- which(satell %in% out)
-    data[index,]
-    # There are two outliers, as following:
-    # color spine width satell weight
-    # 15     3     1  26.0     14    2.3
-    # 56     3     3  28.3     15    3.0
-
+    # Adult is the reference, Child is indicated by indicator.
+    # Meaning, given the same condition on class and sex, when # comparing to a adult, the LOG-odds of survival for a 
+    # child is higher than that of an adult by 1.0615.
+    # Thus, odds of survival of a child passenger will be more
+    # than that of an adult by e^1.0615 = 2.89 TIMES
     ```
 
-3.  Create a qq plot of this variable. Give your comment about this plot.
+5.  Obtain and compare the ROC curves and AUC for the two classifiers: naive Bayes (from Tutorial 8) and logistic regression.
 
     ```{r}
-    qqnorm(satell,  pch = 20)
-    qqline(satell, col = "red")
+    library('e1071')
+    M1 <- naiveBayes(survived_numeric ~ Class + Sex + Age, data = df)
+    M2 <- glm(survived_numeric ~ Class + Sex + Age, data = df, family = binomial)
 
-    # Comments:
-    # Observed values on the left are clearly higher then the expected values,
-    # meaning the data has shorter left tail.
-    # Hence, satell data is not normally distributed
-    ```
+    pred.M2 <- predict(M2, newdata = df, type = 'response')
+    pred_lr <- prediction(pred.M2, df$survived_numeric)
+    roc_lr <- performance(pred_lr, measure = "tpr", x.measure = "fpr")
+    plot(roc_lr, col = "red")
 
-**Part II**: Variable color
+    pred.M1 <- predict(M1, newdata = df, type = 'raw')
+    pred_nb <- prediction(pred.M1[, 2], df$survived_numeric) # pred.M1[,2] is score 
+    roc_nb <-  performance(pred_nb, measure = "tpr", x.measure = "fpr")
+    plot(roc_nb, col = "blue", add = TRUE)
 
-4.  Write the code to create a new categorical variable, `col`, which equals to light if the crab has color 2 or 3, and equals to dark if the crab has color 4 or 5.
+    legend(x = "bottomright", 
+           c("logistic regression", "naiveBayes"),
+           col = c("red", "blue"), 
+           lty = 1)
 
-    ```{r}
+    auc_lr = performance(pred_lr, measure ="auc")@y.values[[1]]
+    auc_lr # 0.7597259
 
-    data$col <- numeric(length(satell))
-    data$col[which(color <= 3)] <- "light"
-    data$col[which(color > 3)] <- "dark"
+    auc_nb <- performance(pred_nb, "auc")@y.values[[1]]
+    auc_nb #0.7164944
 
-    head(data)
-    attach(data)
-    ```
-
-5.  Create a frequency table for variable `col` created above. How many crabs are of light color and how many crabs are of dark color?
-
-    ```{r}
-    table(col)
-    ```
-
-6.  Plot a scatter plot of `weight` and `satell`, classified by `col`. Add a legend box for this plot. Give your comment about this plot.
-
-    ```{r}
-    plot(satell ~ weight, 
-         type = "n",
-         xlab="Weight",
-         ylab="Satell", 
-         main = "Crab Data")
-
-    points(satell[col == "light"] ~ weight[col == "light"], pch = 20, col = "red")
-    points(satell[col == "dark"] ~ weight[col == "dark"], pch = 20, col = "blue")
-    legend(4.5, 15, legend=c("light", "dark"),col = c("red", "blue"), pch = 20)
-
-    # Comments:
-    # Overall, weight and satell has (quiet weak) POSITIVE
-    # and possibily LINEAR relationship.
-    # For light color or for dark color, the relationship between satell and weight
-    # are about similar, no clear difference
-    # as weight changes, the variability of satell gets larger
+    # LR is slightly better than NB in 
+    # predicting survival status 
 
 
     ```
 
-**Part III**: Modelling
+### Onsite Questions (Logistic Regression, Threshold)
 
-7.  Fit a linear regression model for `satell` using three features `color`, `weight` and `width`.
+(Data set `Smarket.csv` contains data on percentage returns for the S&P 500 stock index over 1250 days, from the beginning of 2001 until the end of 2005. For each date, the data contains the trading volume and the percentage returns for each of the five previous trading days, `Lag1` through `Lag5`.
+
+1.  Find the proportion of the days that the direction is up.
 
     ```{r}
-    data$color = as.factor(data$color)
-    M = lm(satell ~ color + weight + width, data = data)
+    df <- read.csv("Smarket.csv")
+    str(df)
+    df$X <- NULL
+    tab <- prop.table(table(df$Direction))
+    print(tab)
+    # Proportion of days where direction is up is 0.5184
     ```
 
-8.  Report the value of $R^2$ of the model above. Give your comments on the goodness-of-fit of the model.
+2.  Fit a logistic regression model (called model M3) that helps to predict the direction of S&P 500 index, based on trading volume and the percentage returns for each of the five previous trading days, `Lag1` through `Lag5`.
 
     ```{r}
-    summary(M)
+    df$num_dir <- ifelse(df$Direction == "Up", 1, 0)
+    str(df)
+    M3 <- glm(num_dir ~ Volume + Lag1 + Lag2 + Lag3 + Lag4 + Lag5,
+              data = df,
+              family = binomial)
+    summary(M3)
 
-    # Comments:
-    # R^2 = 0.1492
-    # Though F-test for the significance of the overall  model: model is significant
-    # However, R^2 is too low. It means model doesn't fit the data well.
     ```
 
-### Questions 2 *(30 points)*
-
-A data set `data2.csv` contains cases from a study that was conducted between 1958 and 1970 at the University of Chicago's Billings Hospital on the survival of patients who had undergone surgery for breast cancer.
-
-A table of variable description is given below. `status` is the response in this study.
-
-+---------------+------------------------------------------------------------+
-| Variable      | Description                                                |
-+:==============+============================================================+
-| age           | age of patient at which they undergone surgery             |
-+---------------+------------------------------------------------------------+
-| year          | year in which patient was undergone surgery (1958 - 1969)  |
-+---------------+------------------------------------------------------------+
-| node          | number of lymph nodes that have cancer cells detected      |
-+---------------+------------------------------------------------------------+
-| status        | 1 = the patient survived 5 years or longer (negative); and |
-|               |                                                            |
-|               | 2 = the patient died within 5 years (positive)             |
-+---------------+------------------------------------------------------------+
-
-For this problem, we will not consider the year when patient was undergone the surgery, `year`, as a feature for classification.
-
-In R, use `set.seed(999)`.
-
-We would:
-
--   Use KNN algorithm where K can be any positive integers, from 1 up to 50, to form classifiers to predict the outcome.
-
--   For each classier, evaluate it's performance by 3-fold cross validation.
-
--   Use type I error rate and type II error rate as the measures to evaluate each classifiers.
-
--   Select the best K.
+3.  Consider δ = 0.5184 as the border line to predict the direction be up or down, calculate the accuracy of model M3 when predicting for the days in the data set given.\
+    *Hint: To recall on what the role of δ is, please revise Tutorial 5 question 2.*
 
     ```{r}
-    set.seed(999)
+    sigma <- 0.5184
+    pred.prob <- predict(M3, df, type = "response")
+    head(pred.prob)
 
-    hab <- read.csv('data2.csv')
-    head(hab)
-    dim(hab)
-    names(hab)[4] = "status"
+    pred.lab <- ifelse(pred.prob >= sigma, 1, 0)
+    head(pred.lab)
 
-    hab$status = as.factor(hab$status)
-    hab[, 1:3] = lapply(hab[ , 1:3],scale) # SCALING THE FEATURES
+    acc <- mean(pred.lab == df$num_dir)
+    print(acc)
+    # acc got 0.5352
 
-    attach(hab)
-    table(status)
     ```
 
-1.  Write the code for the purposes above. For each classier, the average of Type I error rates from 3-fold cross validation is saved in a vector, (named `ave.type1`); and the average of Type II error rates is saved in another vector (named `ave.type2`).
+4.  (Extra) Write R code to plot the ROC curve for model M3. Derive and report AUC value of it.
 
     ```{r}
-    library(class)
+    library(ROCR)
+    pred <- prediction(pred.prob, df$num_dir)
+    roc <- performance(pred, measure = "tpr", x.measure = "fpr")
+    plot(roc, col = "blue")
 
-    X <- hab[, c(1,3)] # we do not use the 2nd column, year.
-    Y <- hab[, 4] # response
+    auc <- performance(pred , "auc")@y.values[[1]]
+    print(auc) # 0.5387341
 
-    n <- length(Y) # sample size
-    n_folds <- 3
-    folds_j <- sample(rep(1:n_folds, length.out = n ))
-    table(folds_j)
 
-    K = 50
-    ave.type1 = numeric(K) # to store the accuracy for each k of KNN, k is from 1 to K = 50.
-    ave.type2 = numeric(K) # to store the precision for each k of KNN
-    type1=numeric(n_folds)
-    type2=numeric(n_folds)
+    ```
 
-    for(i in 1:K) {
-      for (j in 1:n_folds) {
-      	test_j <- which(folds_j == j) # get the index of the points that will be in the test set
-        test.y = Y[test_j] # response for the test points
-      	knn.pred <- knn(train=X[ -test_j, ], test=X[test_j, ], cl=Y[-test_j ], k=i) 
-        confusion.matrix=table(test.y, knn.pred) # 2 = positive and 1 = negative
-      
-      	type1[j] = confusion.matrix[1,2]/sum(confusion.matrix[1,]) # row 1 means actual negative
-      	type2[j] = confusion.matrix[2,1]/sum(confusion.matrix[2,]) # row 2 means actual positive
+## T10 (K-Means Clustering)
+
+Use kmeans() function: `kout <- kmeans(data, centers = n)`
+
+To get final centroid positions: `kout$centers`
+
+To get size of each cluster: `kout$size`
+
+To get WSS for each cluster: `kout$withinss`
+
+To get Total WSS: `sum(kout$withinss)` OR `kout$tot.withinss`
+
+### Offsite Questions (K-Means Mathematics)
+
+1.  Suppose we have data for five objects on two features:
+
+| Object | x1  | x2  |
+|--------|-----|-----|
+| A      | 1   | 1   |
+| B      | 1.5 | 2   |
+| C      | 3   | 4   |
+| D      | 3.5 | 5   |
+| E      | 4.5 | 5   |
+
+We set k=2 to cluster the five data points into two clusters, P and Q, and initialize the algorithm with the centroids $(x_1, x_2, P) = (2, 2)$ and $(x_1, x_2, Q) = (4, 4)$.
+
+\(a\) Fill up the following table to identify the objects in each cluster during the first iteration of the kkk-means algorithm:
+
+| Cluster | Object(s) |
+|---------|-----------|
+| P       |           |
+| Q       |           |
+
+```{r}
+x1 = c(1, 1.5, 3, 3.5, 4.5)
+x2 = c(1,2,4,5,5)
+
+plot(x1, x2, pch = 20, col = "blue")
+
+text(1.1,1.1,"A")
+text(1.6, 2.2, 'B')
+text(3.1, 4.1, 'C')
+text(3.63, 5, 'D')
+text(4.35, 5, 'E')
+
+# Adding the starting centroids 
+points(2,2, pch = 2, col = 'red')
+text(2.2, 2.1, 'C-P')
+points(4,4, pch = 10, col = 'darkgreen')
+text(4,3.8, 'C-Q')
+
+# 2.458333
+
+```
+
+\(b\) Compute the new centroids for the two clusters based on cluster assignment in (a).
+
+```{r}
+# Adding the new centroids after the first iteration:
+plot(x1, x2, pch = 20, col = "blue")
+
+points(1.25, 1.5, col = 'red', pch = 2)
+text(1.35, 1.4, 'C-P-new')
+points(11/3, 14/3, col = 'darkgreen', pch = 10)
+text(11/3, 4.5, 'C-Q-new')
+```
+
+\(c\) Based on the centroids computed in (b), identify the objects in each cluster during the second iteration of the k-means algorithm.
+
+```{r}
+data = data.frame(x1, x2)
+data
+kout = kmeans(data, centers = 2)
+```
+
+\(d\) Calculate the Within Sum of Squares (WSS) for the clustering assignment in (c).
+
+```{r}
+kout$withinss
+kout$tot.withinss
+```
+
+2.  (K-Means) Consider data set `hdb-2012-to-2014.csv` which was extracted from the published data. The file has information on the HDB resale flats from Jan 2012 to Dec 2014.
+
+\(a\) Load data into R. Use k-means algorithm to pick an optimal value for k in terms of **WSS**, based on two variables, `resale_price` and `floor_area_sqm`.
+
+```{r}
+df <- read.csv("hdb-2012-to-2014.csv")
+# str(df)
+df$X <- NULL
+numeric_df <- df[sapply(df, is.numeric)]
+numeric_df <- scale(numeric_df)
+# str(numeric_df)
+
+K <- 20
+wss <- numeric(K)
+for (k in 1:K) {
+  kout <- kmeans(numeric_df[,c("resale_price", "floor_area_sqm")], centers = k)
+  wss[k] <- kout$tot.withinss
+}
+print(wss)
+
+plot(1:K, wss, type="b")
+# k = 3 is a good choice, 
+# because the reduction in WSS 
+# from k = 3 to k = 4
+# is not significant
+```
+
+\(b\) With the optimal k in part (a), plot the data points in the k clusters determined.
+
+```{r}
+kout <- kmeans(numeric_df, centers = 3)
+plot(
+  df$floor_area_sqm,
+  df$resale_price,
+  col = kout$cluster
+)
+```
+
+```{r}
+unscaled_kout <- kmeans(df[,c("floor_area_sqm", "resale_price")], centers = 3)
+plot(
+  df$floor_area_sqm,
+  df$resale_price,
+  col = unscaled_kout$cluster
+)
+
+```
+
+### Onsite Questions (K-Means Clustering)
+
+Consider the famous Iris Flower Data set which was first introduced in 1936 by the famous statistician Ronald Fisher. This data set consists of observations from flowers of Iris species. For each observation, four features were measured: the flower's length and width of the sepals and petals (in cm).\
+The data set is given in a file named `iris.csv`.
+
+1.  Use K-means clustering method to cluster all the flowers into k groups where k=1,2,3,…,10 where for each value of k the value of **WSS** - the within sum of squares is obtained.
+
+    ```{r}
+    df <- read.csv("iris.csv")
+    str(df)
+    df$class <- NULL
+    df <- scale(df)
+
+    wss_list <- numeric(10)
+    set.seed(10)
+    for (k in 1:10) {
+      kout <- kmeans(df, centers = k)
+      wss_list[k] <- kout$tot.withinss
       }
-            ave.type1[i] = round(mean(type1), digits = 3)
-            ave.type2[i] = round(mean(type2), digits = 3)
+    print(wss_list)
+    ```
+
+2.  Write code to obtain the plot of **WSS** against k. Which value of k would you choose as the number of clusters for all the observations in the data set? Explain.
+
+    ```{r}
+    plot(1:10, wss_list, 
+         type = 'b',
+         col = "black",
+         xlab = "Number of Clusters", 
+         ylab = "Within Sum of Squares")
+
+    # k = 3 is a good choice, 
+    # because the reduction in WSS 
+    # from k = 3 to k = 4
+    # is not significant
+
+    ```
+
+3.  With the value of k chosen above, report the centroids of all the clusters and the number of the observations in each cluster.
+
+    ```{r}
+    kout <- kmeans(df, centers = 3)
+    kout$centers
+    kout$size
+
+    ```
+
+## T11 (Association Rules)
+
+Machine learning concept used in Market Based Analysis
+
+-   Patterns of co-occurrence
+
+-   Link between products purchased together
+
+Rules **do not** extract an individual’s preference, rather find relationships between set of elements of every distinct transaction. Different from collaborative filtering.
+
+**Support:** Measure of how frequent an itemset is in all the transactions.
+
+![](images/clipboard-2372333094.png)
+
+**Confidence:** Measure of likeliness of occurrence of buying a specific item given that the user is buying another item.
+
+![](images/clipboard-1735566391.png)
+
+**Lift:** The rise in probability of having {Y} in the cart with the knowledge of {X} being present (compared to no knowledge on {X} being present)
+
+![](images/clipboard-832366.png)
+
+Lift \< 1 : Having {X} on the cart does not increase the chances of occurrence of {Y} on the cart
+
+Lift \> 1 :  Vouches for high association between {Y} and {X}. Higher value indicates greater chances of preference to buy {Y} if the customer has already bought {X}
+
+**Leverage:** Similar notion to Lift, except instead of using Ratios, it uses differences
+
+![](images/clipboard-3216104608.png)
+
+Similar notion to Lift, except instead of using Ratios, it uses differences
+
+Leverage \> 0 : Strong relationship for {X} -\> {Y}
+
+Leverage = 0 : Statistically Independent ({X} does not affect {Y})
+
+Leverage \< 0 : Negative relationship between {X} and {Y}
+
+### Offsite Questions (Association Rules Mathematics)
+
+1.  A local retailer has a database that stores 10,000 transactions of last summer. After analyzing the data, a data science team has identified the following statistics:
+
+-   {battery} appears in 6000 transactions
+-   {sunscreen} appears in 5000 transactions
+-   {sandals} appears in 4000 transactions
+-   {bowls} appears in 2000 transactions
+-   {battery, sunscreen} appears in 1500 transactions
+-   {battery, sandals} appears in 1000 transactions
+-   {battery, bowls} appears in 250 transactions
+-   {battery, sunscreen, sandals} appears in 600 transactions
+
+(a) What are the support values of the preceding itemsets?
+
+    ![](images/clipboard-4287054081.png)
+
+(b) Assuming the minimum support is 0.05, which itemsets are considered frequent?
+
+    ![](images/clipboard-3013610408.png)
+
+(c) What are the confidence values of {battery} → {sunscreen} and {battery, sunscreen} → {sandals}? Which of these two rules is more interesting, i.e., has higher values of confidence?
+
+![](images/clipboard-3457055832.png)
+
+2.  Suppose for three products ( A, B ) and ( C ), support({A}) = 0.6, support({B}) = 0.6, confidence({B} → {A}) = 0.9 and confidence({C} → {A, B}) = 0.5. Compute the following quantities:
+    -   Lift({A} → {B})
+
+    -   Leverage({A} → {B})
+
+    -   Confidence({A} → {B})
+
+    -   Lift({A, B} → {C})
+
+        ![](images/clipboard-1247641227.png)
+
+### Q&A
+
+1.  Can you explain the order function?
+
+    Returns indexes of sorted version of vector passed to it
+
+    ```{r}
+    x <- c(9, 18, 5, 15, 12)
+    order(x)
+    ```
+
+    ```{r}
+    x <- c(9, 18, 5, 15, 12)
+    sorted_indexes <- order(x)
+    x[sorted_indexes]
+    ```
+
+    ```{r}
+    x <- c(9, 18, 5, 15, 12)
+    x[order(x)]
+    ```
+
+    ```{r}
+    df <- data.frame(
+      x = c(9, 18, 5, 15, 12),
+      y = c("A", "B", "C", "D", "E"))
+
+    df
+
+    sorted_index <- order(df$x)
+    df[sorted_index, ]
+
+    sorted_index <- order(df$x, decreasing = TRUE)
+    df[sorted_index, ]
+
+
+    ```
+
+2.  Is it possible to give a template code for every topic?
+
+    -   Template code is provided in the Tutorial R Code files on Canvas
+
+    -   Can also look through previous tutorial slides for sample code
+
+    -   Go through the code, understand the logic and be prepared to modify it where necessary to suit the final’s questions’ needs
+
+    ```{r}
+    #| eval: false
+
+    # (3.e) Repeat question 3d for k = 3, 5, 10. Which k gives the best precision?
+
+    k_values = c(3, 5, 10)
+    for (k_val in k_values) {
+      knn.pred <- knn(train.X, test.X, train.Y, k = k_val) 
+      conf.matrix <- table(test.Y, knn.pred)
+      precision <- conf.matrix[2,2]/sum(conf.matrix[,2])
+      print(paste(k_val, precision))
     }
 
-    ave.type1
-    ave.type2
     ```
-
-2.  Report the length of vector `ave.type1` and the length of vector `ave.type2`.
 
     ```{r}
-    length(ave.type1) # 50, same as K
-    length(ave.type2) # 50, same as K
+    #| eval: false
+
+
+    # (1.e.) Use 5-fold cross validation to get average accuracy (K = 1).
+
+    n_folds <- 5
+    folds <- rep(1:n_folds, length.out = dim(data)[1])
+    folds <- sample(folds)
+    accuracies <- numeric(n_folds)
+
+    for (curr_fold in 1:n_folds) {
+      test_index <- which(folds == curr_fold)
+      train.X <- standardised.X[-test_index,]
+      test.X <- standardised.X[test_index,]
+      train.Y <- data$Creditability[-test_index]
+      test.Y <- data$Creditability[test_index]
+      pred <- knn(train.X, test.X, train.Y, k = 1)
+      accuracies[curr_fold] <- mean(test.Y == pred)
+    }
     ```
 
-3.  Write the code to produce a scatter plot where `ave.type1` is in X-axis and `ave.type2` is in Y-axis.
+3.  If a NB question has numeric inputs in the dataset given, are we expected to change it to categorical by using as.factor? Even if qn doesn’t say anything? Or qn wud usually specify?
+
+    -   Naive Bayes can actually handle numeric features, but it is not taught in this course
+
+    -   As such, any features for Naive Bayes should be categorical
+
+    -   Do not change it to categorical yourself, question will usually specify
+
+    1.  Can you explain conditional entropy and its calculation?
+        -   Entropy is a measure of the randomness
+
+            ![](images/clipboard-451619793.png)
+
+        -   Imagine using this to measure entropy of flipping a coin
+
+            ![](images/clipboard-157113776.png)
+
+        -   Formula for conditional entropy
+
+            ![](images/clipboard-3492415708.png)
+
+# Midterm Practice
+
+1.  (50 points) The data file patient_satisfaction.csv is a random sample collected from a\
+    hospital about the satisfactory of patients about the hospital's service when they were discharged.\
+    The data set includes information about patient's age, the score of illness severity, the anxiety\
+    score, and the status if the patient went through surgery (1) or only had medical treatment (0).\
+    The given file contains columns with names listed below.
+
+    ![](images/clipboard-3191248250.png)
+
+    please run function setwd() in a separate line (if you need it) when importing the data set\
+    into R. Use set.seed(310)
 
     ```{r}
-    plot(ave.type1, ave.type2, pch = 20)
-    ```
+    # setwd("/Users/rayana/Desktop/DSAFIN")
+    set.seed(310)
 
-4.  For this study, we assume that type I error can be tolerated while type II error is not. Which value of K would you choose among the three smallest type II error rate, yet the type I error rate is not larger than 15%? Report the type I and type II error rate for that value of K.
+    ## Part 1 ##
+
+    data <- read.csv("Patient Satisfaction.csv")
+    #Q1
+    names(data)[4] <- "Surgical"
+    #Q2
+    prop.table(table(data$Surgical))
+    # 56% patients had surgery
+    #Q3
+    hist(data$Satisfaction, probability = TRUE, 
+         main = "Histogram of Satisfaction with Normal Density Curve",
+         xlab = "Satisfaction", col = "lightblue", border = "black")
+
+    x_values <- seq(min(data$Satisfaction), max(data$Satisfaction), length = 100)
+    y_values <- dnorm(x_values, mean = mean(data$Satisfaction), sd = sd(data$Satisfaction))
+    lines(x_values, y_values, col = "red", lwd = 2)
+
+    ```
 
     ```{r}
-    sort(ave.type2)[1:3] 
-    # index of K that produced three smallest type 2 error
-    index = which(ave.type2 %in% c(sort(ave.type2)[1:3])) 
-    index
+    #Q4
+    qqnorm(data$Satisfaction, pch = 20)
+    qqline(data$Satisfaction, col = "red")
 
-    # values of type 1 error for those K with 3 smallest type 2 error
-    ave.type1[index] 
-    # among those values of K, we choose the one that gives types 1 error smaller than 15%
-    # values of K could be chosen are: 2, 5
-    # since K = 2 gives second smallest type 2 error = 63.4% with type 1 error = 14.2%,
-    # and K = 5 gives third smalles type 2 error = 64% with type 1 error = 11.1%.
+    # Comments:
+    # BOTH LEFT TAIL AND RIGHT TAIL ARE NOT CLEARLY CONTRADICT FROM NORMAL 
+    # SOME MIGHT SAY: RIGHT TAIL POSSIBLY/LIGHTLY SHORTER THAN NORMAL
+
     ```
 
-## Y(23/24) S1
+    ```{r}
+    #Q5
+
+    bp <- boxplot(data$Satisfaction ~ data$Surgical)
+
+    # outliers <- bp$out
+    # length(outliers)
+    # index <- which(data$Satisfaction %in% outliers)
+    # fev[index,]
+
+    # the median point of satisfaction for patients got surgical is lower.
+    # 2 boxes are overlapping. 
+    # Hence, NO clear difference in the satisfaction points of patients with or without surgical. 
+    # no outlier for both groups 
+
+    ```
+
+    ```{r}
+    #Q6
+    #unsurge = data$Satisfaction[which(data$Surgical==0)]
+    #surge = data$Satisfaction[which(data$Surgical==1)] 
+
+    plot(data$Satisfaction ~ data$Age, type = "n")
+    points(data$Satisfaction[which(data$Surgical == 1)] ~ data$Age[which(data$Surgical==1)], col = "red", pch = 20)
+    points(data$Satisfaction[which(data$Surgical == 0)] ~ data$Age[which(data$Surgical==0)], col = "blue", pch = 20)
+    legend(25, 50, legend = c("Surgical", "No surgical"), col = c("red","blue"), pch=c(20,20))
+
+    cor(data$Satisfaction, data$Age)
+    # -0.87
+    # strong negative association, quite linear  
+    # the variablity of satisfaction is quite stable when age changes 
+    ```
+
+    ```{r}
+    ## Part 2 ##
+    #Q7
+    data$Surgical <- as.factor(data$Surgical)
+    M <- lm(Satisfaction ~ ., data = data)
+    summary(M)
+    # (Surgical = 1) and Anxiety variables are not significant at significance level 0.1
+
+    #Q8
+    A <- data.frame(Age = 35, Severity = 45, Anxiety = 2.5, Surgical = "0")
+    B <- data.frame(Age = 60, Severity = 40, Anxiety = 3, Surgical = "1")
+    predict(M, newdata = A)
+    predict(M, newdata = B)
+
+    # REPORT THE OUTCOMES
+    # A: 82.19378 
+    # B: 58.83136
+    ```
+
+    ```{r}
+    ## Part 3 ##
+    #Q9
+    data$S <- ifelse(data$Satisfaction <= 70, "Not Good", "Good")
+    #Q10
+    data.X <- scale(data[,c("Age", "Severity", "Anxiety")])
+    #Q11
+    train.index <- sample(nrow(data), size = 15)
+
+    ```
+
+    ```{r}
+    #Q12
+    Y <- data$S
+    train.X <- data.X[train.index, ]  
+    test.X <- data.X[-train.index, ] 
+    train.y <- Y[train.index] 
+    test.y <- Y[-train.index] 
+
+    library(class)
+    k_values <- c(3, 5, 7, 9, 11)
+    accuracy <- numeric()  
+
+    for (k in k_values) {  
+        knn.pred <- knn(train.X, test.X, train.y, k = k) 
+        confusion.matrix <- table(test.y, knn.pred)  
+        accuracy <- append(accuracy, sum(diag(confusion.matrix)) / sum(confusion.matrix))  
+    }
+
+    print(accuracy)
+
+    ```
+
+    ```{r}
+    #Q13
+    plot(k_values, accuracy, type = "b")
+    #Q14
+    # best k is either 3,5,7
+    ```
+
+    ```{r}
+    #Q15
+    scaled_A <- data.frame(
+      Age = (A$Age - mean(data$Age)) / sd(data$Age),
+      Severity = (A$Severity - mean(data$Severity)) / sd(data$Severity),
+      Anxiety = (A$Anxiety - mean(data$Anxiety)) / sd(data$Anxiety)
+    )
+
+    knn.pred <- knn(train.X, scaled_A, train.y, k = 3)
+    knn.pred
+
+    # REPORT: PATIENT A is predicted as will rank Good for for hospital service. 
+
+    ```
+
+```{r}
+### 2
+#Q1
+annual_salary <- 50000
+salary_increase <- 0.05
+saving <- 30000
+target <- 100000
+saved_proportion <- 0.2
+
+function.year <- function(annual_salary, salary_increase, saving, target, saved_proportion) {
+  year <- 0
+  while (saving < target) {
+    annual_salary <- annual_salary * (1 + salary_increase)
+    saving <- saving + annual_salary * saved_proportion
+    year <- year + 1
+  }
+ return(year)
+}
+
+function.year(annual_salary, salary_increase, saving, target, saved_proportion)
+#Alena need to save for 6 years
+```
+
+```{r}
+#Q2
+annual_salary <- 50000
+salary_increase <- 0.05
+saving <- 30000
+target <- 100000
+saved_proportion <- 0.2
+
+year <- function.year(annual_salary, salary_increase, saving, target, saved_proportion)
+while (year > 5) {
+  saved_proportion <- saved_proportion + 0.01
+  year <- function.year(annual_salary, salary_increase, saving, target, saved_proportion)
+}
+print(saved_proportion)
+# smallest proportion of annual salary that she should save so that she could have enough
+# money for her start-up at the end of 2029 is 25%
+```
+
+# Final Practice
+
+### 23/24 Semester 2
+
+![](images/clipboard-1262997958.png)
+
+```{r}
+# ===== Question 1 =====
+
+# a) True.
+# b) True
+# c) False
+# d) False. 
+# e) True
+```
+
+![](images/clipboard-42922271.png)
+
+![](images/clipboard-1716315755.png)
+
+```{r}
+# ===== Question 2 =====
+
+# a) Right skewed
+# b) Histogram
+# c) Scatter Plot 
+# d) Box Plot 
+# e) A 
+
+```
+
+![](images/clipboard-1551795137.png)
+
+```{r}
+# ===== Question 3 =====
+df1 <- read.csv('crab.csv')
+df1$color = as.factor(df1$color)
+df1$spine = as.factor(df1$spine)
+
+```
+
+```{r}
+## ---- PART I: LINEAR REGRESSION MODEL ----
+hist(df1$satell,col = 'red')
+# The histogram for satell is heavily right skewed, 
+# there are no gaps in the range of values, and
+# there might be suspected outliers in the data
+
+plot(df1$width,df1$satell,pch = 20)
+# Comment: No clear association between satell and width.
+
+M1 <- lm(satell ~ color + spine + width + weight, data = df1)
+summary(M1)$r.squared
+# comment: R squared value of M1 is 0.151, this means that the model can only explain 15.1% of the variance of the dataset
+
+# Width is the most insignificant, it has the highest p-value
+
+```
+
+![](images/clipboard-3024193786.png)
+
+![](images/clipboard-147900429.png)
+
+```{r}
+## ---- PART II: LOGISTIC REGRESSION MODEL ----
+df1$status <- ifelse(df1$satell >0, 1,0)
+
+table(df1$status)
+# There are 111 female crabs that have at least 1 satellite 
+
+CS.table <- table(df1$color,df1$status)
+CS.table
+# There are 69 female crabs that are of medium colour and has at least a satellite
+
+prop.table(CS.table,margin = 1)
+# P(Status = 1 | Color = 2) = 0.75
+# P(Status = 1 | Color = 3) = 0.73
+# P(Status = 1 | Color = 4) = 0.59
+# P(Status = 1 | Color = 5) = 0.32
+
+# Ans: There is a negative association between color and the probability that it has satellites.
+#      From the table, as color increases, meaning the darker the crab, 
+#      the conditional probability that the crab has at least one satellite decreases. 
+
+M2 <- glm(status ~ width + weight + color, data = df1,family = binomial)
+summary(M2)
+# Equation: log(p/(1-p)) = -8.6445 + 0.2906 * width 
+#                                            + 0.7727 * weight
+#                                            + 0.1310 * I(color = 3)
+#                                            - 0.1610 * I(color = 4)
+#                                            - 1.2453 * I(color = 5)
+
+# Ans: I represents the indicator variable,
+#      and p represents the probability that a crab has at least one satellite
+
+# Ans: Coefficient of weight is 0.7727.
+#      This means with all other variables kept the same,
+#      for every 1kg increase in the weight of a crab, the log odds of that crab having at least 1 satellite increases by 
+#      0.7727. Equivalently, for each 1kg increase in weight, 
+#      the odds of a crab having at least 1 satellite will be e^0.7727 times higher. 
+
+# Ans: Coefficient of medium color is 0.1310 and coefficient of darker color is -1.2453.
+#      This means with all other variables kept the same,
+#      the log odds of a crab with medium color having at least 1 satellite will be 0.1310 MORE than a crab with light color, and 
+#      the log odds of a crab with dark color having at least 1 satellite be 1.2453 LESS than a crab with light color.
+#      This means that the log odds of a crab with medium color having at least 1 satellite will be 0.1310-(-1.2453) = 1.3763 MORE 
+#      than a crab with darker color.
+#      Equivalently, This means the odds of having at least 1 satellite for a crab with a medium colour is 
+#      e^1.3763 = 3.96 times more than that of a crab with darker color.
+
+width <- c(26,30)
+weight <- c(2.6,4.0)
+color = c("4","2")
+spine = c("1","3")
+newdata = data.frame(width,weight,color,spine);newdata
+log_reg_new_pred <- predict(M2,newdata= newdata,type = 'response')
+log_reg_new_pred
+# Probability of having satellites for crab A: 68.1%
+# Probability of having satellites for crab B: 95.9%
+
+head(df1)
+log_reg_pred <- predict(M2,newdata = df1,type = 'response')
+library(ROCR)
+log_reg_prediction <- prediction(log_reg_pred,df1[,6])
+log_reg_perf <- performance(log_reg_prediction, "tpr","fpr")
+plot(log_reg_perf,col = 'red')
+log_reg_auc <- performance(log_reg_prediction,"auc")@y.values[[1]]
+log_reg_auc
+# auc = 0.777
+
+delta_values <- log_reg_perf@alpha.values[[1]]
+fpr_values <- log_reg_perf@x.values[[1]]
+tpr_values <-log_reg_perf@y.values[[1]]
+par(mar = c(5 ,5 ,2 ,5))
+plot(delta_values ,tpr_values , xlab ="Threshold", xlim =c(0 ,1) ,
+     ylab = "True positive rate ", type ="l", col = "blue")
+par( new ="True")
+plot(delta_values ,fpr_values , xlab ="", ylab ="", axes =F, xlim =c(0 ,1) , type ="l", col = "red" )
+axis( side =4) # to create an axis at the 4th side
+mtext(side =4, line =3, "False positive rate")
+text(0.5 ,0.4, "FPR", col = "red")
+text(0.58 ,0.9 , "TPR", col = "blue")
+
+delta_indices <- which(delta_values >=0.59 & delta_values <=0.6)
+tpr_values[delta_indices]
+fpr_values[delta_indices]
+
+log_reg_pred_binary <- ifelse(log_reg_pred >=0.5,1,0)
+log_reg_cm <- table(log_reg_pred_binary,df1[,"status"])
+log_reg_acc <- sum(diag(log_reg_cm))/sum(log_reg_cm)
+log_reg_acc
+# Accuracy 0.711
+```
+
+![](images/clipboard-1859428080.png)
+
+```{r}
+## ---- PART III: NAIVE BAYES CLASSIFIER ----
+library(e1071)
+M3 <- naiveBayes(status ~ color + spine + width + weight, data = df1)
+nb_pred <- predict(M3,newdata= df1[,c(1,2,3,5)])
+nb_cm <- table(nb_pred,df1[,"status"])
+nb_acc <- sum(diag(nb_cm))/sum(nb_cm)
+nb_acc
+# nb_acc: 0.705
+
+predict(M3,newdata =newdata,type = 'raw')
+# Probability of having satellites for crab A: 67.6%
+# Probability of having satellites for crab B: 99.9%
+```
+
+![](images/clipboard-2332687476.png)\
+
+```{r}
+#| eval: false
+# ===== Question 4 =====
+data <- read.csv('penguins-dsa1101.csv')
+head(data)
+plot(data$bill_depth,data$mass)
+# I would choose 2 clusters, just looking at the scatterplots
+
+data.X = scale(data[,c("bill_depth","mass")])
+k <- 8 
+wss <- numeric(k)
+for (i in 1:k){
+  kout <- kmeans(data.X,centers = i)
+  wss[i] <- kout$tot.withinss
+}
+wss
+
+plot(1:k,wss,type = 'b')
+# I would choose 5 clusters. 
+
+kout <- kmeans(data.X,centers = 5)
+kout$centers
+# bill_depth       mass
+#1  0.1678949 -0.9957828
+#2 -0.4620534  1.8340519
+#3  1.0700111 -0.2252665
+#4 -1.5269045  0.5077693
+#5 -1.0217963  1.2903276
+
+kout$size
+# [1] 110  31 109  53  39
+plot(data$bill_depth,data$mass,col = kout$cluster)
+```
+
+### 23/24 Semester 1
+
+![](images/clipboard-2508438044.png)
+
+![](images/clipboard-3398826487.png)
+
+![![](images/clipboard-4102285046.png)](images/clipboard-2782196490.png)
+
+![![](images/clipboard-2742103053.png)](images/clipboard-2272837594.png)
+
+![![](images/clipboard-815472199.png)](images/clipboard-787868926.png)
+
+![![](images/clipboard-2730625458.png)](images/clipboard-2544933882.png)
+
+![![](images/clipboard-3300006473.png)](images/clipboard-3145109450.png)
+
+![](images/clipboard-3194953828.png)
+
+![](images/clipboard-1072861743.png)
+
+![](images/clipboard-4049283898.png)
+
+![](images/clipboard-3337044383.png)
+
+![](images/clipboard-1677050925.png)
+
+### Canvas Practice Final
+
+![](images/clipboard-3085252033.png)
+
+```{r}
+# ===== PART 0: DATA PREPARATION =====
+set.seed(1101)
+## ---- Q1) Import dataset and remove the first 3 columns ----
+data = read.csv("data_finals.csv")
+data = data[, -c(1:3)]
+
+## ---- Q2) Report the number of developed countries in the dataset ----
+table(data$Status)
+# Ans: There are 14 developed countries in the dataset.
+
+## ---- Q3) Transform the variable "Status" into numeric binary ----
+data$Status = ifelse(data$Status == "Developing", 0, 1)
+
+```
+
+![](images/clipboard-176048828.png)
+
+```{r}
+# ===== PART 1: LINEAR REGRESSION MODEL =====
+## ---- Q4) Form a linear model for "Status" and report its R^2 ----
+M1 = lm(Status ~., data)
+summary(M1)$r.squared
+# Ans: The R^2 value of M1 is 0.300.
+
+## ---- Q5) Number of fitted values of M1 are less than 0 ----
+sum(M1$fitted.values < 0)
+# Ans: There are 24 fitted values that are less than 0.
+
+## ---- Q6) Limitations of fitting a linear model to "Status" ----
+# Ans: 1) Status is a categorical variable, which is inappropriate for linear models that assume a quantitative response.
+#      2) Linear model predictions can extend beyond the range [0, 1], limiting their interpretation as probabilities.
+
+## ---- Q7) Derive the area under the ROC Curve for M1 ----
+library(ROCR)
+M1.prob = M1$fitted.values
+M1.rocr = prediction(M1.prob, data$Status)
+M1.auc = performance(M1.rocr, "auc")@y.values[[1]]; M1.auc
+# Ans: The ROC-AUC value for M1 is 0.890.
+```
+
+![](images/clipboard-4238747404.png)
+
+```{r}
+# ===== PART 2: LOGISTIC REGRESSION MODEL ====
+## ---- Q8) Form a logistic regression model for "Status" with its equation ----
+M2 = glm(Status ~., data, family = binomial(link ="logit"))
+M2$coefficients
+# Ans: log[p/(1-p)] = -19.526 + 0.228 * (Life_expectancy)
+#                             + 0.000855 * (Adult_mortality)
+#                             - 0.472 * (infant_deaths)
+#                             + 0.149 * (Alcohol)
+# Notation: p is the predicted probability that a country is developed.
+
+## ---- Q9) Report and interpret the coefficient of "Alcohol" in M2 ----
+# Ans: The coefficient for Alcohol is 0.149.
+#      Each 1L increase in alcohol consumption multiplies the odds of being a developed country by 1.160, 
+#      assuming other factors are held constant.
+
+## ---- Q10) Predict the probability that a country is developed ----
+new_country = data.frame(Life_expectancy = 83,
+                         Adult_mortality = 57,
+                         infant_deaths = 2,
+                         Alcohol = 3)
+
+predict(M2, new_country, type = "response")
+# Ans: The probability that this country is developed is 0.253.
+
+## ---- Q11) Derive the area under the ROC Curve for M2 ----
+M2.prob = predict(M2, data, type = "response")
+M2.rocr = prediction(M2.prob, data$Status)
+M2.auc = performance(M2.rocr, "auc")@y.values[[1]]; M2.auc
+# Ans: The ROC-AUC value for M2 is 0.934.
+
+## ---- Q12) Plot TPR and FPR against Threshold for M2 ----
+M2.perf = performance(M2.rocr, "tpr", "fpr")
+M2.tpr = M2.perf@y.values[[1]]
+M2.fpr = M2.perf@x.values[[1]]
+M2.threshold = M2.perf@alpha.values[[1]]
+plot(M2.threshold, M2.tpr, 
+     xlim = c(0, 1), ylim = c(0, 1), 
+     type = "l", col = "blue", 
+     main = "TPR & FPR vs Threshold for M2", 
+     xlab = "Threshold", ylab = "Rate")
+lines(M2.threshold, M2.fpr, type = "l", col = "red")
+legend("topright", legend = c("TPR", "FPR"), col = c("blue", "red"), lty = 1)
+
+## ---- Q13) Evaluate the choice of δ = 0.5 ----
+# Ans: A 0.5 threshold yields a very low FPR (<5%) but a sub-optimal TPR (≈65%).
+#      There exist lower thresholds that improve TPR significantly with minimal increase in FPR.
+#      Therefore, a 0.5 threshold is not ideal for balancing TPR and FPR.
+
+## ---- Q14) Report the values of TPR & FPR when δ ∈ (0.19, 0.2) and comment ----
+M2.metrics = data.frame(Threshold = M2.threshold, TPR = M2.tpr, FPR = M2.fpr)
+M2.metrics[M2.metrics$Threshold > 0.19 & M2.metrics$Threshold < 0.20, ]
+# Ans: When δ ∈ (0.19, 0.2), the TPR is 92.9% and the FPR ranges from 18.7% to 20.0%.
+#      The classifier can correctly identify significantly more developed countries.
+#      However, this comes with a slight increase in mislabeled developing countries.
+```
+
+![](images/clipboard-1827076362.png)
+
+```{r}
+# ===== PART 3: NAIVE BAYES CLASSIFIER =====
+## ---- Q15) Form a Naive Bayes Classifier for "Status" ----
+library(e1071)
+M3 = naiveBayes(Status ~., data)
+
+## ---- Q16) Calculate the accuracy of M3 ----
+M3.pred = predict(M3, data, type = "class")
+M3.matrix = table(data$Status, M3.pred)
+M3.acc = sum(diag(M3.matrix))/sum(M3.matrix); M3.acc
+# Ans: The accuracy of M3 is 0.742.
+
+## ---- Q17) Predict the probability that a country is developed ----
+predict(M3, new_country, type = "raw")
+# Ans: The probability that this country is developed is 0.985.
+
+## ---- Q18) Derive the area under the ROC Curve for M3 ----
+M3.prob = predict(M3, data, type = "raw")[, 2]
+M3.rocr = prediction(M3.prob, data$Status)
+M3.auc = performance(M3.rocr, "auc")@y.values[[1]]; M3.auc
+# Ans: The ROC-AUC value for M3 is 0.936.
+```
+
+![](images/clipboard-3229832677.png)
+
+```{r}
+# ===== PART 4: K-NEAREST NEIGHBOURS ====
+## ---- Q19) Form the best KNN classifier based on accuracy ----
+library(class)
+data.scale = data.frame(Status = data$Status, scale(data[, -1]))
+k_values = c(2:10)
+acc_values = numeric(length(k_values))
+
+for (i in seq_along(k_values)){
+  pred = knn(data.scale[, -1], data.scale[, -1], data.scale$Status, k = k_values[i])
+  matrix = table(data.scale$Status, pred)
+  acc = sum(diag(matrix))/sum(matrix)
+  acc_values[i] = acc
+}
+
+knn.metrics = data.frame(K = k_values, Accuracy = acc_values)
+knn.metrics[order(knn.metrics$Accuracy, decreasing = TRUE), ]
+# Ans: K = 3 gives the best accuracy of 0.955.
+
+## ---- Q20) Derive the area under the ROC Curve for M4 ----
+M4.pred = knn(data.scale[, -1], data.scale[, -1], data.scale$Status, k = 3, prob = TRUE)
+M4.prob_major = attr(M4.pred, "prob") 
+M4.prob = ifelse(M4.pred == "1", M4.prob_major, 1 - M4.prob_major)
+M4.rocr = prediction(M4.prob, data.scale$Status)
+M4.auc = performance(M4.rocr, "auc")@y.values[[1]]; M4.auc
+# Ans: The ROC-AUC value for M4 is 0.981.
+```
+
+![](images/clipboard-1946524145.png)
+
+```{r}
+# ===== PART 5: DECISION TREES ====
+## ---- Q21) Form a Decision Tree for "Status" ----
+library(rpart)
+M5 = rpart(Status ~ ., data, method = "class",
+           control = rpart.control(cp = 0.01), 
+           parms = list(split = 'gini'))
+
+## ---- Q22) Most important features for predicting "Status" ----
+library(rpart.plot)
+rpart.plot(M5, type = 4, extra = 2)
+M5$variable.importance
+# Ans: Alcohol consumption is the most important feature, followed by life expectancy.
+
+## ---- Q23) Plot the ROC of M3 and M5 in one figure with a legend ----
+M3.perf = performance(M3.rocr, "tpr", "fpr")
+M5.prob = predict(M5, data, type = "prob")[, 2]
+M5.rocr = prediction(M5.prob, data$Status)
+M5.perf = performance(M5.rocr, "tpr", "fpr")
+
+plot(M3.perf, col = "red", main = paste("ROC Curves"),
+     xlab = "False Positive Rate", ylab = "True Positive Rate")
+plot(M5.perf, col = "blue", add = TRUE)
+abline(a = 0, b = 1, col = "black", lty = 2)
+legend("bottomright", legend = c("Naive Bayes (M3)", "Decision Tree (M5)"),
+       lty = 1, col = c("red", "blue"))
+
+## ---- Q24) Determining model with the highest AUC value ----
+M5.auc = performance(M5.rocr, "auc")@y.values[[1]]
+which.max(c(M1.auc, M2.auc, M3.auc, M4.auc, M5.auc))
+max(c(M1.auc, M2.auc, M3.auc, M4.auc, M5.auc))
+# Ans: M4 (KNN) has the highest ROC-AUC of 0.981.
+```
