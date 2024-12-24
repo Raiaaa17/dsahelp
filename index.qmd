@@ -251,15 +251,15 @@ There are assumptions have to be fulfilled before using linear model:
 
 If data is found to be asymmetric, can do transformation: log(Y), sqrt(Y), 1/Y
 
-+---------------------+---------------------------+------------------------+
-| Transformation      | Restriction               | Reverse Transformation |
-+=====================+===========================+========================+
-| new_Y \<- log(Y)    | Y can't be 0 nor negative | pred \<- exp(pred)     |
-+---------------------+---------------------------+------------------------+
-| new_Y \<- sqrt(Y)   | Y can't be negative       | pred \<- pred\*\*2     |
-+---------------------+---------------------------+------------------------+
-| new_Y \<- 1/Y       | Y can't be 0              | pred \<- 1/pred        |
-+---------------------+---------------------------+------------------------+
++-------------------+---------------------------+------------------------+
+| Transformation    | Restriction               | Reverse Transformation |
++===================+===========================+========================+
+| new_Y \<- log(Y)  | Y can't be 0 nor negative | pred \<- exp(pred)     |
++-------------------+---------------------------+------------------------+
+| new_Y \<- sqrt(Y) | Y can't be negative       | pred \<- pred\*\*2     |
++-------------------+---------------------------+------------------------+
+| new_Y \<- 1/Y     | Y can't be 0              | pred \<- 1/pred        |
++-------------------+---------------------------+------------------------+
 
 To evaluate goodness of fit, we consider F-test and $R^2$. When comparing models however, use adjusted $R^2$
 
@@ -415,6 +415,7 @@ Note: In your code for the questions below, you MUST use the names as given in b
     ```
 
     \
+
     (b) Find the smallest value of n such that $x_n$ ≥ 1,000
 
     ```{r}
@@ -835,7 +836,11 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
     points(weight[spine == "1"] ~ width[spine =="1"], pch = 15, col = "red")
     points(weight[spine == "2"] ~ width[spine =="2"], pch = 16, col = "blue")
     points(weight[spine == "3"] ~ width[spine =="3"], pch = 17, col = "green")
-    legend(22,4,legend=c("1", "2", "3"),col=c("red", "blue", "green"), pch=c(15,16,17))
+    legend(22,5,
+           legend=c("Spine = 1", "Spine = 2", "Spine = 3"),
+           col=c("red", "blue", "green"), 
+           pch=c(15,16,17)
+           )
     ```
 
     \(b\) Fit a linear regression model for weight which has two explanatories, width and spine.
@@ -845,7 +850,7 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
     summary(model)
     ```
 
-    \(c\) Is the fitted model signicant?
+    \(c\) Is the fitted model significant?
 
     ```{r}
     # the model f statistic showing p value is less than 2.2 x 10^-16.
@@ -865,18 +870,21 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
 
     ```{r}
     summary(model)
-    # weight = -3.92955 + 0.24376*width + 0.05544*I(spine=2) -0.06969*I(spine=3)
+    # weight = -3.92955 + 0.24376*width + 0.05544*I(spine=2) - 0.06969*I(spine=3)
     ```
 
-    \(f\) Two female crabs of the same width, and the diference of their weight if one has spines are of good condition and another one with broken spines.
+    \(f\) Two female crabs of the same width, and the difference of their weight if one has spines are of good condition and another one with broken spines.
 
     ```{r}
-    # weight = -3.92955 + 0.24376*width + 0.05544*I(spine=2) + -0.06969*I(spine=3)
-    # weight1 = -3.92955 + 0.24376*width + 0.05544*0 + -0.06969*0
-    # weight2 = -3.92955 + 0.24376*width + 0.05544*0 + -0.06969*1
+    # weight = -3.92955 + 0.24376*width + 0.05544*I(spine=2) - 0.06969*I(spine=3)
+    # weight1 = -3.92955 + 0.24376*width + 0.05544*0 - 0.06969*0
+    # weight2 = -3.92955 + 0.24376*width + 0.05544*0 - 0.06969*1
 
-    weight.dif <- (0.05544*0 + -0.06969*0) - (0.05544*0 + -0.06969*1)
+    weight.dif <- (0.05544*0 - 0.06969*0) - (0.05544*0 - 0.06969*1)
     weight.dif
+
+    # When they have the same width, then on average the one that has spines
+    # of good condition is heavier than the one with broken spines by 0.06969 kg.
     ```
 
     \(g\) Predict the weight of a female crab that has width of 27 cm and has both spines worn or broken.
@@ -894,15 +902,17 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
 
     (a) We define: $TPR = \frac {TP}{TP +FN}$, $FPR = \frac {FP}{FP +TN}$; For each of the thresholds δ = 0.3, 0.6 and 0.8, derive $TPR$ and $FPR$ in making predictions with the K-nearest neighbors classier for the 10 test data points. Plot $TPR$ against $FPR$ for the three thresholds.
 
+        ![](images/clipboard-2786262008.png){width="364"}
+
     ```{r}
     y <- c(1,1,0,1,1,0,0,1,0,0)
     ycap <- c(0.9,0.5,0.7,0.4,0.5,0.2,0.7,0.9,0.1,0.1)
     tpr.all <- numeric(0)
     fpr.all <- numeric(0)
 
-    sigma.list <- c(0.3,0.6,0.8)
-    for (sigma in sigma.list) {
-      pred <- ifelse(ycap >= sigma, 1 ,0)
+    delta.list <- c(0.3,0.6,0.8)
+    for (delta in delta.list) {
+      pred <- ifelse(ycap >= delta, 1 ,0)
       confusion.matrix <- table(y, pred)
       tpr <- confusion.matrix[2,2]/sum(confusion.matrix[2,])
       fpr <- confusion.matrix[1,2]/sum(confusion.matrix[1,])
@@ -910,7 +920,7 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
       fpr.all <- append(fpr.all, fpr)
     }
 
-    plot(tpr.all ~ fpr.all, pch = 20,
+    plot(tpr.all ~ fpr.all, type = "n", pch = 20,
          xlim = c(0,1),
          ylim = c(0,1))
     points(tpr.all[1] ~ fpr.all[1], pch = 15, col = "red")
@@ -960,9 +970,9 @@ predict(M2, newdata=data.frame(size=4000, NW = "1"))
     \(c\) Randomly select 1000 observations to form the test data, and the remaining observations will be the training data.
 
     ```{r}
-    set.seed(5)
+    set.seed(99)
     n <- dim(cara)[1] #train data number
-    shuffled.index <- sample(c(1:n), size = 1000)
+    shuffled.index <- sample(c(1:n), size = 2000)
     X.train <- scaled.X[-shuffled.index,]
     X.test<- scaled.X[shuffled.index,]
     Y.train <- as.factor(cara$Purchase[-shuffled.index])
@@ -1183,7 +1193,24 @@ COMING SOON
     # the petal length and petal width are more important.
     ```
 
-------------------------------------------------------------------------
+    ```{r}
+    pred <- predict(fit, newdata = iris[-5], type = "class")
+    confussion_matrix <- table(iris[,5], pred)
+    accuracy <- sum(diag(confussion_matrix))/sum(confussion_matrix)
+    accuracy
+    ```
+
+    ```{r}
+    newdata <- data.frame(
+      sepal.length <- 5,
+      sepal.width <- 2.9,
+      petal.length <- 7,
+      petal.width <- 0.3
+    )
+
+    pred <- predict(fit, newdata = newdata, type = "prob")
+    pred
+    ```
 
 # Past Year Papers
 
