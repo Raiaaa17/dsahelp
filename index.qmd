@@ -2532,33 +2532,43 @@ plot(data$bill_depth,data$mass,col = kout$cluster)
 
 ### 23/24 Semester 1
 
-![](images/clipboard-2508438044.png)
+![](images/clipboard-637032502.png)
 
-![](images/clipboard-3398826487.png)
+![](images/clipboard-2324260449.png)
 
-![![](images/clipboard-4102285046.png)](images/clipboard-2782196490.png)
+![](images/clipboard-3573320976.png)
 
-![![](images/clipboard-2742103053.png)](images/clipboard-2272837594.png)
+![](images/clipboard-2103380400.png)
 
-![![](images/clipboard-815472199.png)](images/clipboard-787868926.png)
+![](images/clipboard-880892070.png)
 
-![![](images/clipboard-2730625458.png)](images/clipboard-2544933882.png)
+![](images/clipboard-541912188.png)
 
-![![](images/clipboard-3300006473.png)](images/clipboard-3145109450.png)
+![](images/clipboard-1598151284.png)
 
-![](images/clipboard-3194953828.png)
+![](images/clipboard-804333387.png)
 
-![](images/clipboard-1072861743.png)
+![](images/clipboard-593481924.png)
 
-![](images/clipboard-4049283898.png)
+![](images/clipboard-160726913.png)
 
-![](images/clipboard-3337044383.png)
+![](images/clipboard-276878906.png)
 
-![](images/clipboard-1677050925.png)
+![](images/clipboard-2853785811.png)
+
+![](images/clipboard-222807988.png)
+
+![](images/clipboard-1407415003.png)
+
+![](images/clipboard-1908122565.png)
+
+![](images/clipboard-456727249.png)
+
+![](images/clipboard-2977436779.png)
 
 ### Canvas Practice Final
 
-![](images/clipboard-3085252033.png)
+![](images/clipboard-9636182.png)
 
 ```{r}
 # ===== PART 0: DATA PREPARATION =====
@@ -2576,7 +2586,7 @@ data$Status = ifelse(data$Status == "Developing", 0, 1)
 
 ```
 
-![](images/clipboard-176048828.png)
+![](images/clipboard-3122530433.png)
 
 ```{r}
 # ===== PART 1: LINEAR REGRESSION MODEL =====
@@ -2601,7 +2611,7 @@ M1.auc = performance(M1.rocr, "auc")@y.values[[1]]; M1.auc
 # Ans: The ROC-AUC value for M1 is 0.890.
 ```
 
-![](images/clipboard-4238747404.png)
+![](images/clipboard-2513850972.png)
 
 ```{r}
 # ===== PART 2: LOGISTIC REGRESSION MODEL ====
@@ -2660,7 +2670,7 @@ M2.metrics[M2.metrics$Threshold > 0.19 & M2.metrics$Threshold < 0.20, ]
 #      However, this comes with a slight increase in mislabeled developing countries.
 ```
 
-![](images/clipboard-1827076362.png)
+![](images/clipboard-2661946738.png)
 
 ```{r}
 # ===== PART 3: NAIVE BAYES CLASSIFIER =====
@@ -2685,7 +2695,7 @@ M3.auc = performance(M3.rocr, "auc")@y.values[[1]]; M3.auc
 # Ans: The ROC-AUC value for M3 is 0.936.
 ```
 
-![](images/clipboard-3229832677.png)
+![](images/clipboard-1071989663.png)
 
 ```{r}
 # ===== PART 4: K-NEAREST NEIGHBOURS ====
@@ -2715,7 +2725,7 @@ M4.auc = performance(M4.rocr, "auc")@y.values[[1]]; M4.auc
 # Ans: The ROC-AUC value for M4 is 0.981.
 ```
 
-![](images/clipboard-1946524145.png)
+![](images/clipboard-2552298950.png)
 
 ```{r}
 # ===== PART 5: DECISION TREES ====
